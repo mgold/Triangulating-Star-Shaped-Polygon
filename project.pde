@@ -1,10 +1,14 @@
 import java.util.*;
 
+final float TAU = TWO_PI;
+
 final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 120;
 
 ArrayList<Point> points;
+ArrayList<Point> connectToKernel;
+ArrayList<Point> connectToSelves;
 Point kernel;
 int idcounter;
 
@@ -35,6 +39,17 @@ float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
 }
 
+//argument is an index of points
+boolean isConvex(int i){
+    i %= points.size();
+    Point current = points.get(i);
+    Point prev    = points.get(i == 0 ? points.size()-1 : i-1);
+    Point next    = points.get((i+1)%points.size());
+    float theta0 = atan2(current.y-prev.y, current.x-prev.x);
+    float theta1 = atan2(current.y-next.y, current.x-next.x);
+    return sin((theta1-theta0)%TAU) < 0;
+}
+
 void setup(){
     size(400,600);
     textAlign(LEFT, TOP);
@@ -51,10 +66,7 @@ void setup(){
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
 }
 
-void draw(){
-    background(#FFFFFF);
-
-    fill(#000000);
+void update(){
     state.tick();
     switch (state.state){
         case ASSIGN1:
@@ -64,26 +76,39 @@ void draw(){
             }
             break;
         case ASSIGN2:
-        text("Click in the box to add points.", 5, width);
-        if (state.timer > STATEDELAY){
-            state.next();
-        }
-        break;
+            text("Click in the box to add points.", 5, width);
+            if (state.timer > STATEDELAY){
+                state.next();
+            }
+            break;
         case ASSIGN3:
-        text("Click here when you're done.", 5, width);
-        if (state.timer > STATEDELAY){
-            state.next();
-        }
-        break;
+            text("Click here when you're done.", 5, width);
+            if (state.timer > STATEDELAY){
+                state.next();
+            }
+            break;
         case ASSIGN4:
-        break;
+            break;
         case SORT:
-        Collections.sort(points);
-        shouldDrawEdges = true;
-        break;
+            Collections.sort(points);
+            shouldDrawEdges = true;
+            for (int i = 0; i < points.size(); i++){
+                points.get(i).setConvex(isConvex(i));
+            }
+            state.next();
+            break;
+        case FLIP:
+            break;
         default:
-        println(state.state);
+            println(state.state);
     }
+}
+
+void draw(){
+    background(#FFFFFF);
+
+    fill(#000000);
+    update();
 
     if (shouldDrawEdges){
         Point current = points.get(0);
@@ -122,6 +147,7 @@ void mouseClicked(){
             idcounter++;
         }
         break;
+        default:
     }
 
 }
