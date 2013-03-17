@@ -56,6 +56,8 @@ void setup(){
     textSize(24);
 
     points = new ArrayList();
+    connectToKernel = new ArrayList();
+    connectToSelves = new ArrayList();
     kernel = new Point(KERNELX, KERNELY, 0);
     kernel.fillColor = #FF0000;
     idcounter = 1;
@@ -89,12 +91,14 @@ void update(){
             break;
         case ASSIGN4:
             break;
+
         case SORT:
             Collections.sort(points);
             shouldDrawEdges = true;
             for (int i = 0; i < points.size(); i++){
                 points.get(i).setConvex(isConvex(i));
             }
+            connectToKernel = (ArrayList<Point>)points.clone();
             state.next();
             break;
         case FLIP:
@@ -113,13 +117,15 @@ void draw(){
     if (shouldDrawEdges){
         Point current = points.get(0);
         Point next = points.get(1);
+        stroke(#000000);
         for (int i = 2; i < points.size()+2; i++){
-            stroke(#000000);
             line(current.x, current.y, next.x, next.y);
-            stroke(128,128,256);
-            line(current.x, current.y, KERNELX, KERNELY);
             current = next;
             next = points.get(i%points.size());
+        }
+        stroke(128,128,256);
+        for (Point p : connectToKernel){
+            line(p.x, p.y, KERNELX, KERNELY);
         }
     }
 
