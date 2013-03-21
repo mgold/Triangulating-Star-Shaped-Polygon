@@ -1,5 +1,5 @@
 final int PT_KERNEL = 0;
-final int PT_OUTSIDE = 1;
+final int PT_OLD = 1;
 final int PT_CONVEX = 2;
 final int PT_REFLEX = 3;
 final int PT_ASSIGN = 4;
@@ -37,15 +37,38 @@ class Point implements Comparable<Point>{
     }
 
     void addLinkTo(Point other){
-        int lt = -1;
-        if (pt == PT_KERNEL || other.pt == PT_KERNEL){
-            lt = LT_KERNEL;
-        }else if(pt == PT_ASSIGN || other.pt == PT_ASSIGN){
-            lt = LT_POLYGON;
-        }else{
-            lt = LT_CURRENT;
+        if (this != other){
+            int lt = -1;
+            if (pt == PT_KERNEL || other.pt == PT_KERNEL){
+                lt = LT_KERNEL;
+            }else if(pt == PT_ASSIGN || other.pt == PT_ASSIGN){
+                lt = LT_POLYGON;
+            }else{
+                lt = LT_CURRENT;
+            }
+            links.add(new Link(x, y, other.x, other.y, lt));
         }
-        links.add(new Link(this, other, lt));
+    }
+
+    void removeKernelLink(){
+        for(int i = links.size()-1; i >= 0; i--) {
+            if(links.get(i).lt == LT_KERNEL){
+                links.remove(i);
+            }
+        }
+    }
+
+    void setToOld(){
+        pt = PT_OLD;
+        for (Link link : links){
+            link.lt = LT_OLD;
+        }
+    }
+
+    void drawLinks(){
+        for (Link link : links){
+            link.draw();
+        }
     }
 
     void draw(){
@@ -54,7 +77,7 @@ class Point implements Comparable<Point>{
             case PT_KERNEL:
                 fill(#FF0000);
                 break;
-            case PT_OUTSIDE:
+            case PT_OLD:
                 fill(#888888);
                 break;
             case PT_CONVEX:

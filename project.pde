@@ -7,8 +7,6 @@ final int KERNELY = 200;
 final int STATEDELAY = 120;
 
 ArrayList<Point> points;
-ArrayList<Point> connectToKernel;
-ArrayList<Point> connectToSelves;
 Point kernel;
 int idcounter;
 
@@ -56,8 +54,6 @@ void setup(){
     textSize(24);
 
     points = new ArrayList();
-    connectToKernel = new ArrayList();
-    connectToSelves = new ArrayList();
     kernel = new Point(KERNELX, KERNELY, 0, PT_KERNEL);
     idcounter = 1;
     state = new State();
@@ -95,9 +91,11 @@ void update(){
             Collections.sort(points);
             shouldDrawEdges = true;
             for (int i = 0; i < points.size(); i++){
-                points.get(i).setConvex(isConvex(i));
+                Point current = points.get(i);
+                current.addLinkTo(points.get((i+1)%points.size()));
+                kernel.addLinkTo(current);
+                current.setConvex(isConvex(i));
             }
-            connectToKernel = (ArrayList<Point>)points.clone();
             state.next();
             state.timer = 2;
             break;
@@ -109,10 +107,11 @@ void update(){
                 for (int i = 0; i < points.size(); i++){
                     Point current = points.get(i);
                     if (current.pt == PT_CONVEX){
-                        connectToKernel.remove(current);
-                        connectToSelves.add(points.get(i == 0 ? points.size()-1 : i-1));
-                        connectToSelves.add(points.get((i+1)%points.size()));
-                        current.setConvex(false);
+                        current.removeKernelLink();
+                        //Point left = points.get(i == 0 ? points.size()-1 : i-1);
+                        //Point right = points.get((i+1)%points.size());
+                        //left.addLinkTo(right);
+                        current.setToOld();
                         /*
                         for (int j = i-1; j < i+1; j++){
                             int k = j >= 0 ? j : points.size()-j;
@@ -131,29 +130,14 @@ void update(){
 
 void draw(){
     background(#FFFFFF);
-
     fill(#000000);
+
     update();
 
     if (shouldDrawEdges){
-        Point current = points.get(0);
-        Point next = points.get(1);
-        stroke(#000000);
-        for (int i = 2; i < points.size()+2; i++){
-            line(current.x, current.y, next.x, next.y);
-            current = next;
-            next = points.get(i%points.size());
-        }
-        stroke(256,128,128);
-        for (Point p : connectToKernel){
-            line(p.x, p.y, KERNELX, KERNELY);
-        }
-        stroke(128,128,256);
-        assert(connectToSelves.size() % 2 == 0);
-        for (int i = 0; i < connectToSelves.size(); i+=2){
-            Point p = connectToSelves.get(i);
-            Point q = connectToSelves.get(i+1);
-            line(p.x, p.y, q.x, q.y);
+        kernel.drawLinks();
+        for (Point point : points) {
+            point.drawLinks();
         }
     }
 
@@ -161,6 +145,7 @@ void draw(){
         point.draw();
     }
     kernel.draw();
+
     stroke(#000000);
     line(0,width,width,width);
 

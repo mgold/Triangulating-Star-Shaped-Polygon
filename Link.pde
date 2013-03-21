@@ -1,29 +1,30 @@
 final int LT_KERNEL = 0;
-final int LT_OUTSIDE = 1;
+final int LT_OLD = 1;
 final int LT_POLYGON = 2;
 final int LT_CURRENT = 3;
 
 class Link {
-    Point a, b;
+    float ax, ay, bx, by;
     int lt;
 
-    Link(Point _a, Point _b, int _lt){
-        a = _b;
-        b = _b;
+    Link(float _ax, float _ay, float _bx, float _by, int _lt){
+        ax = _ax;
+        ay = _ay;
+        bx = _bx;
+        by = _by;
         lt = _lt;
     }
 
     void draw(){
-        noFill();
         switch(lt){
             case LT_KERNEL:
                 stroke(#FF8888);
                 break;
-            case LT_OUTSIDE:
+            case LT_OLD:
                 stroke(#888888);
                 break;
             case LT_POLYGON:
-                stroke(#00FF00);
+                stroke(#000000);
                 break;
             case LT_CURRENT:
                 stroke(#8888FF);
@@ -31,7 +32,7 @@ class Link {
             default:
                 stroke(#FFFF00);
         }
-        line(a.x,a.y,b.x,b.y);
+        line(ax, ay, bx, by);
     }
 
 }
