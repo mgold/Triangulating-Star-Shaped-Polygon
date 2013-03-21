@@ -1,23 +1,28 @@
+final int PT_KERNEL = 0;
+final int PT_OUTSIDE = 1;
+final int PT_CONVEX = 2;
+final int PT_REFLEX = 3;
+final int PT_ASSIGN = 4;
+
+
 class Point implements Comparable<Point>{
     float x, y;
     float r;
     int id;
-    color fillColor;
+    int pt;
 
     float angle;
     float kernelDist;
-    boolean convex;
 
-    Point(float _x, float _y, int _id){
+    Point(float _x, float _y, int _id, int _pt){
         x = _x;
         y = _y;
         id = _id;
+        pt = _pt;
         r = 5;
-        fillColor = #000000;
 
         angle = atan2(KERNELY-y, KERNELX-x);
         kernelDist = dist(KERNELX, KERNELY, x, y);
-        convex = false;
     }
 
     int compareTo(Point other){
@@ -25,13 +30,32 @@ class Point implements Comparable<Point>{
     }
 
     void setConvex(boolean _convex){
-        convex = _convex;
-        fillColor = convex ? #00FF00 : #0000FF;
+        if (pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN){
+            pt = _convex ? PT_CONVEX : PT_REFLEX;
+        }
     }
 
     void draw(){
         noStroke();
-        fill(fillColor);
+        switch(pt){
+            case PT_KERNEL:
+                fill(#FF0000);
+                break;
+            case PT_OUTSIDE:
+                fill(#888888);
+                break;
+            case PT_CONVEX:
+                fill(#00FF00);
+                break;
+            case PT_REFLEX:
+                fill(#FF8800);
+                break;
+            case PT_ASSIGN:
+                fill(#000000);
+                break;
+            default:
+                fill(#FFFF00);
+        }
         ellipse(x,y,r,r);
         float dx = mouseX -x;
         float dy = mouseY -y;

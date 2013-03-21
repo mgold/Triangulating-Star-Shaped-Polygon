@@ -51,15 +51,14 @@ boolean isConvex(int i){
 }
 
 void setup(){
-    size(400,600);
+    size(400,500);
     textAlign(LEFT, TOP);
     textSize(24);
 
     points = new ArrayList();
     connectToKernel = new ArrayList();
     connectToSelves = new ArrayList();
-    kernel = new Point(KERNELX, KERNELY, 0);
-    kernel.fillColor = #FF0000;
+    kernel = new Point(KERNELX, KERNELY, 0, PT_KERNEL);
     idcounter = 1;
     state = new State();
     shouldDrawEdges = false;
@@ -100,8 +99,30 @@ void update(){
             }
             connectToKernel = (ArrayList<Point>)points.clone();
             state.next();
+            state.timer = 2;
             break;
         case FLIP:
+            if (state.timer > STATEDELAY){
+                state.timer = 1;
+            }
+            if (state.timer == 1){
+                for (int i = 0; i < points.size(); i++){
+                    Point current = points.get(i);
+                    if (current.convex){
+                        connectToKernel.remove(current);
+                        connectToSelves.add(points.get(i == 0 ? points.size()-1 : i-1));
+                        connectToSelves.add(points.get((i+1)%points.size()));
+                        current.setConvex(false);
+                        /*
+                        for (int j = i-1; j < i+1; j++){
+                            int k = j >= 0 ? j : points.size()-j;
+                            points.get(k).setConvex(isConvex(k));
+                        }
+                        */
+                        break;
+                    }
+                }
+            }
             break;
         default:
             println(state.state);
@@ -123,9 +144,16 @@ void draw(){
             current = next;
             next = points.get(i%points.size());
         }
-        stroke(128,128,256);
+        stroke(256,128,128);
         for (Point p : connectToKernel){
             line(p.x, p.y, KERNELX, KERNELY);
+        }
+        stroke(128,128,256);
+        assert(connectToSelves.size() % 2 == 0);
+        for (int i = 0; i < connectToSelves.size(); i+=2){
+            Point p = connectToSelves.get(i);
+            Point q = connectToSelves.get(i+1);
+            line(p.x, p.y, q.x, q.y);
         }
     }
 
@@ -149,7 +177,7 @@ void mouseClicked(){
                 state.next();
             }
         }else{
-            points.add(new Point(mouseX, mouseY,idcounter));
+            points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
             idcounter++;
         }
         break;
