@@ -46,14 +46,20 @@ class Point implements Comparable<Point>{
             }else{
                 lt = LT_CURRENT;
             }
-            links.add(new Link(x, y, other.x, other.y, lt));
+            Link link = new Link(x, y, other.x, other.y, lt);
+            this.addLink(link);
+            other.addLink(link);
         }
     }
 
+    void addLink(Link link){
+        links.add(link);
+    }
+
     void removeKernelLink(){
-        for(int i = links.size()-1; i >= 0; i--) {
-            if(links.get(i).lt == LT_KERNEL){
-                links.remove(i);
+        for(Link link : links){
+            if(link.lt == LT_KERNEL){
+                link.lt = LT_GONE;
             }
         }
     }
@@ -61,7 +67,9 @@ class Point implements Comparable<Point>{
     void setToOld(){
         pt = PT_OLD;
         for (Link link : links){
-            link.lt = LT_OLD;
+            if (link.lt != LT_GONE){
+                link.lt = LT_OLD;
+            }
         }
     }
 

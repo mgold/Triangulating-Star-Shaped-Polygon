@@ -108,9 +108,9 @@ void update(){
                     Point current = points.get(i);
                     if (current.pt == PT_CONVEX){
                         current.removeKernelLink();
-                        //Point left = points.get(i == 0 ? points.size()-1 : i-1);
-                        //Point right = points.get((i+1)%points.size());
-                        //left.addLinkTo(right);
+                        Point left = points.get(i == 0 ? points.size()-1 : i-1);
+                        Point right = points.get((i+1)%points.size());
+                        left.addLinkTo(right);
                         current.setToOld();
                         /*
                         for (int j = i-1; j < i+1; j++){
