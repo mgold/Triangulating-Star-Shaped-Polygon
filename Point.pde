@@ -4,7 +4,6 @@ final int PT_CONVEX = 2;
 final int PT_REFLEX = 3;
 final int PT_ASSIGN = 4;
 
-
 class Point implements Comparable<Point>{
     float x, y;
     float r;
@@ -13,6 +12,7 @@ class Point implements Comparable<Point>{
 
     float angle;
     float kernelDist;
+    ArrayList<Link> links;
 
     Point(float _x, float _y, int _id, int _pt){
         x = _x;
@@ -23,6 +23,7 @@ class Point implements Comparable<Point>{
 
         angle = atan2(KERNELY-y, KERNELX-x);
         kernelDist = dist(KERNELX, KERNELY, x, y);
+        links = new ArrayList();
     }
 
     int compareTo(Point other){
@@ -33,6 +34,18 @@ class Point implements Comparable<Point>{
         if (pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN){
             pt = _convex ? PT_CONVEX : PT_REFLEX;
         }
+    }
+
+    void addLinkTo(Point other){
+        int lt = -1;
+        if (pt == PT_KERNEL || other.pt == PT_KERNEL){
+            lt = LT_KERNEL;
+        }else if(pt == PT_ASSIGN || other.pt == PT_ASSIGN){
+            lt = LT_POLYGON;
+        }else{
+            lt = LT_CURRENT;
+        }
+        links.add(new Link(this, other, lt));
     }
 
     void draw(){

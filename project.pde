@@ -108,7 +108,7 @@ void update(){
             if (state.timer == 1){
                 for (int i = 0; i < points.size(); i++){
                     Point current = points.get(i);
-                    if (current.convex){
+                    if (current.pt == PT_CONVEX){
                         connectToKernel.remove(current);
                         connectToSelves.add(points.get(i == 0 ? points.size()-1 : i-1));
                         connectToSelves.add(points.get((i+1)%points.size()));
