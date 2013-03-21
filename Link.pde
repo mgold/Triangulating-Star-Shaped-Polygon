@@ -5,14 +5,12 @@ final int LT_CURRENT = 3;
 final int LT_GONE = 4;
 
 class Link {
-    float ax, ay, bx, by;
+    Point a, b;
     int lt;
 
-    Link(float _ax, float _ay, float _bx, float _by, int _lt){
-        ax = _ax;
-        ay = _ay;
-        bx = _bx;
-        by = _by;
+    Link(Point _a, Point _b, int _lt){
+        a = _a;
+        b = _b;
         lt = _lt;
     }
 
@@ -35,7 +33,7 @@ class Link {
             default:
                 stroke(#FFFF00);
         }
-        line(ax, ay, bx, by);
+        line(a.x, a.y, b.x, b.y);
     }
 
 }

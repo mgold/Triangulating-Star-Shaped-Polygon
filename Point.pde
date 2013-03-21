@@ -46,7 +46,7 @@ class Point implements Comparable<Point>{
             }else{
                 lt = LT_CURRENT;
             }
-            Link link = new Link(x, y, other.x, other.y, lt);
+            Link link = new Link(this, other, lt);
             this.addLink(link);
             other.addLink(link);
         }
