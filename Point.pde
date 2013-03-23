@@ -14,6 +14,9 @@ class Point implements Comparable<Point>{
     float kernelDist;
     ArrayList<Link> links;
 
+    Point left;
+    Point right;
+
     Point(float _x, float _y, int _id, int _pt){
         x = _x;
         y = _y;
@@ -24,15 +27,20 @@ class Point implements Comparable<Point>{
         angle = atan2(KERNELY-y, KERNELX-x);
         kernelDist = dist(KERNELX, KERNELY, x, y);
         links = new ArrayList();
+
+        left = right = null;
     }
 
     int compareTo(Point other){
         return int(10000*(angle - other.angle));
     }
 
-    void setConvex(boolean _convex){
-        if (pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN){
-            pt = _convex ? PT_CONVEX : PT_REFLEX;
+    void setConvex(){
+        if ((pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN)
+            && left != null && right != null){
+            float theta0 = atan2(y-left.y, x-left.x);
+            float theta1 = atan2(y-right.y, x-right.x);
+            pt =  sin((theta1-theta0)%TAU) < 0 ? PT_CONVEX : PT_REFLEX;
         }
     }
 

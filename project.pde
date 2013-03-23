@@ -8,6 +8,7 @@ final int STATEDELAY = 120;
 
 ArrayList<Point> points;
 Point kernel;
+Point head;
 int idcounter;
 
 State state; //No enums in Processing
@@ -37,17 +38,6 @@ float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
 }
 
-//argument is an index of points
-boolean isConvex(int i){
-    i %= points.size();
-    Point current = points.get(i);
-    Point prev    = points.get(i == 0 ? points.size()-1 : i-1);
-    Point next    = points.get((i+1)%points.size());
-    float theta0 = atan2(current.y-prev.y, current.x-prev.x);
-    float theta1 = atan2(current.y-next.y, current.x-next.x);
-    return sin((theta1-theta0)%TAU) < 0;
-}
-
 void setup(){
     size(400,500);
     textAlign(LEFT, TOP);
@@ -58,6 +48,7 @@ void setup(){
     idcounter = 1;
     state = new State();
     shouldDrawEdges = false;
+    head = null;
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
@@ -90,12 +81,16 @@ void update(){
         case SORT:
             Collections.sort(points);
             shouldDrawEdges = true;
+            points.get(0).left = points.get(points.size()-1);
             for (int i = 0; i < points.size(); i++){
                 Point current = points.get(i);
                 current.addLinkTo(points.get((i+1)%points.size()));
                 kernel.addLinkTo(current);
-                current.setConvex(isConvex(i));
+                current.right = points.get((i+1)%points.size());
+                current.right.left = current;
+                current.setConvex();
             }
+            head = points.get(0);
             state.next();
             state.timer = 2;
             break;
@@ -104,27 +99,28 @@ void update(){
                 state.timer = 1;
             }
             if (state.timer == 1){
-                for (int i = 0; i < points.size(); i++){
-                    Point current = points.get(i);
-                    if (current.pt == PT_CONVEX){
-                        current.removeKernelLink();
-                        Point left = points.get(i == 0 ? points.size()-1 : i-1);
-                        Point right = points.get((i+1)%points.size());
-                        left.addLinkTo(right);
-                        current.setToOld();
-                        /*
-                        for (int j = i-1; j < i+1; j++){
-                            int k = j >= 0 ? j : points.size()-j;
-                            points.get(k).setConvex(isConvex(k));
-                        }
-                        */
+                Point head0 = null;
+                while (head != head0){
+                    if (head0 == null){
+                        head0 = head;
+                    }
+                    if (head.pt == PT_CONVEX){ //TODO: and doesn't include the kernel
+                        head.removeKernelLink();
+                        head.left.addLinkTo(head.right);
+                        head.setToOld();
+                        head.left.right = head.right;
+                        head.right.left = head.left;
+                        head.left.setConvex();
+                        head.right.setConvex();
                         break;
                     }
+                    head = head.right;
+
                 }
             }
             break;
         default:
-            println(state.state);
+            println("Unknown state: "+state.state);
     }
 }
 
