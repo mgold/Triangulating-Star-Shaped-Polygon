@@ -15,6 +15,7 @@ class Link {
     }
 
     void draw(){
+        strokeWeight(1);
         switch(lt){
             case LT_KERNEL:
                 stroke(#FF8888);

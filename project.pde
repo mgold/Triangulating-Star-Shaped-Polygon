@@ -138,9 +138,9 @@ void draw(){
     }
 
     for (Point point : points) {
-        point.draw();
+        point.draw(head);
     }
-    kernel.draw();
+    kernel.draw(head);
 
     stroke(#000000);
     line(0,width,width,width);
