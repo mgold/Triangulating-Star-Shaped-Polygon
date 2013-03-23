@@ -16,6 +16,7 @@ class Point implements Comparable<Point>{
 
     Point left;
     Point right;
+    boolean containsKernel;
 
     Point(float _x, float _y, int _id, int _pt){
         x = _x;
@@ -29,6 +30,7 @@ class Point implements Comparable<Point>{
         links = new ArrayList();
 
         left = right = null;
+        containsKernel = pt == PT_KERNEL ? true : false;
     }
 
     int compareTo(Point other){
@@ -38,9 +40,17 @@ class Point implements Comparable<Point>{
     void setConvex(){
         if ((pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN)
             && left != null && right != null){
-            float theta0 = atan2(y-left.y, x-left.x);
-            float theta1 = atan2(y-right.y, x-right.x);
-            pt =  sin((theta1-theta0)%TAU) < 0 ? PT_CONVEX : PT_REFLEX;
+            pt =  rightTurn(left, this, right) ? PT_REFLEX : PT_CONVEX;
+        }
+    }
+
+    void setContainsKernel(){
+        if ((pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN)
+            && left != null && right != null){
+            containsKernel =
+               rightTurn(kernel, left, this)  &&
+               rightTurn(kernel, this, right) &&
+               rightTurn(kernel, right, left);
         }
     }
 
@@ -79,6 +89,7 @@ class Point implements Comparable<Point>{
                 link.lt = LT_OLD;
             }
         }
+        left = right = null;
     }
 
     void drawLinks(){
@@ -115,11 +126,29 @@ class Point implements Comparable<Point>{
                 fill(#FFFF00);
         }
         ellipse(x,y,r,r);
+        if (containsKernel){
+            fill(#FF0000);
+            ellipse(x,y, 2, 2);
+        }
+
         float dx = mouseX -x;
         float dy = mouseY -y;
         if (dx*dx + dy*dy < r*r){
-            //println(degrees(angle));
+            if (left != null & right != null){
+                if (rightTurn(left, this, right)){
+                    println("Right turn");
+                }else{
+                    println("Left turn");
+                }
+                strokeWeight(2);
+                stroke(#FF0000);
+                line(x, y, left.x, left.y);
+                stroke(#00FF00);
+                line(x, y, right.x, right.y);
+            }
+
         }
+
     }
 
 }

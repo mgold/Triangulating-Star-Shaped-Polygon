@@ -38,6 +38,12 @@ float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
 }
 
+
+boolean rightTurn(Point a, Point b, Point c){
+    //matrix determinant
+    return a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - b.x*a.y - c.x*b.y < 0;
+}
+
 void setup(){
     size(400,500);
     textAlign(LEFT, TOP);
@@ -81,16 +87,18 @@ void update(){
         case SORT:
             Collections.sort(points);
             shouldDrawEdges = true;
-            points.get(0).left = points.get(points.size()-1);
+            head = points.get(0);
             for (int i = 0; i < points.size(); i++){
                 Point current = points.get(i);
                 current.addLinkTo(points.get((i+1)%points.size()));
                 kernel.addLinkTo(current);
                 current.right = points.get((i+1)%points.size());
                 current.right.left = current;
-                current.setConvex();
             }
-            head = points.get(0);
+            for (Point current : points){
+                current.setConvex();
+                current.setContainsKernel();
+            }
             state.next();
             state.timer = 2;
             break;
@@ -104,14 +112,18 @@ void update(){
                     if (head0 == null){
                         head0 = head;
                     }
-                    if (head.pt == PT_CONVEX){ //TODO: and doesn't include the kernel
+                    if (head.pt == PT_CONVEX &&  !head.containsKernel){
                         head.removeKernelLink();
                         head.left.addLinkTo(head.right);
-                        head.setToOld();
                         head.left.right = head.right;
                         head.right.left = head.left;
                         head.left.setConvex();
+                        head.left.setContainsKernel();
                         head.right.setConvex();
+                        head.right.setContainsKernel();
+                        Point newHead = head.right;
+                        head.setToOld();
+                        head = newHead;
                         break;
                     }
                     head = head.right;
