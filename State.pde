@@ -4,6 +4,7 @@ final int ASSIGN3 = 2;
 final int ASSIGN4 = 3;
 final int SORT    = 4;
 final int FLIP    = 5;
+final int FINAL   = 6;
 
 class State{
     int state;

@@ -1,10 +1,8 @@
 import java.util.*;
 
-final float TAU = TWO_PI;
-
 final int KERNELX = 200;
 final int KERNELY = 200;
-final int STATEDELAY = 120;
+final int STATEDELAY = 150;
 
 ArrayList<Point> points;
 Point kernel;
@@ -14,7 +12,7 @@ int idcounter;
 State state; //No enums in Processing
 boolean shouldDrawEdges;
 
-//TODO: make this work, then sort points, then draw fake triangulation
+//TODO: write my own sort because Java's don't work in processing.js
 /*
 void bubbleSort(ArrayList<Point> sortme){
   for (int i=0; i<sortme.size(); i++) {
@@ -41,7 +39,7 @@ float bound(float lo, float x, float hi){
 
 boolean rightTurn(Point a, Point b, Point c){
     //matrix determinant
-    return a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - b.x*a.y - c.x*b.y < 0;
+    return a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - b.x*a.y - c.x*b.y > 0;
 }
 
 void setup(){
@@ -112,7 +110,7 @@ void update(){
                     if (head0 == null){
                         head0 = head;
                     }
-                    if (head.pt == PT_CONVEX &&  !head.containsKernel){
+                    if (head.pt == PT_CONVEX && !head.containsKernel){
                         head.removeKernelLink();
                         head.left.addLinkTo(head.right);
                         head.left.right = head.right;
@@ -127,9 +125,11 @@ void update(){
                         break;
                     }
                     head = head.right;
-
                 }
             }
+            break;
+        case FINAL:
+            kernel.setToGone();
             break;
         default:
             println("Unknown state: "+state.state);
@@ -174,6 +174,10 @@ void mouseClicked(){
             idcounter++;
         }
         break;
+        case FLIP:
+        if (mouseY > width){
+            state.timer = 0;
+        }
         default:
     }
 

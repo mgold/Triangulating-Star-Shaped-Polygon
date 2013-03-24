@@ -3,6 +3,7 @@ final int PT_OLD = 1;
 final int PT_CONVEX = 2;
 final int PT_REFLEX = 3;
 final int PT_ASSIGN = 4;
+final int PT_GONE = 5;
 
 class Point implements Comparable<Point>{
     float x, y;
@@ -40,7 +41,7 @@ class Point implements Comparable<Point>{
     void setConvex(){
         if ((pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN)
             && left != null && right != null){
-            pt =  rightTurn(left, this, right) ? PT_REFLEX : PT_CONVEX;
+            pt =  rightTurn(left, this, right) ? PT_CONVEX : PT_REFLEX;
         }
     }
 
@@ -92,6 +93,13 @@ class Point implements Comparable<Point>{
         left = right = null;
     }
 
+    void setToGone(){
+        pt = PT_GONE;
+        for (Link link : links){
+            link.lt = LT_GONE;
+        }
+    }
+
     void drawLinks(){
         for (Link link : links){
             link.draw();
@@ -122,6 +130,8 @@ class Point implements Comparable<Point>{
             case PT_ASSIGN:
                 fill(#000000);
                 break;
+            case PT_GONE:
+                return;
             default:
                 fill(#FFFF00);
         }
@@ -134,21 +144,16 @@ class Point implements Comparable<Point>{
         float dx = mouseX -x;
         float dy = mouseY -y;
         if (dx*dx + dy*dy < r*r){
-            if (left != null & right != null){
-                if (rightTurn(left, this, right)){
-                    println("Right turn");
-                }else{
-                    println("Left turn");
-                }
+            if (left != null && right != null) {
                 strokeWeight(2);
                 stroke(#FF0000);
                 line(x, y, left.x, left.y);
                 stroke(#00FF00);
                 line(x, y, right.x, right.y);
             }
-
         }
 
-    }
+    }//end of draw()
 
-}
+}//end of class
+
