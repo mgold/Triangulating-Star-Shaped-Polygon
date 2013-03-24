@@ -102,7 +102,19 @@ void update(){
             break;
         case FLIP:
             if (state.timer > STATEDELAY){
-                state.timer = 1;
+                boolean seenReflexOrConvexWithoutKernel = false;
+                for (Point point : points){
+                    if (point.pt == PT_REFLEX ||
+                       (point.pt == PT_CONVEX && ! point.containsKernel)){
+                        seenReflexOrConvexWithoutKernel = true;
+                        break;
+                       }
+                }
+                if (! seenReflexOrConvexWithoutKernel){
+                    state.next();
+                }else{
+                    state.timer = 1;
+                }
             }
             if (state.timer == 1){
                 Point head0 = null;
@@ -130,6 +142,9 @@ void update(){
             break;
         case FINAL:
             kernel.setToGone();
+            for (Point point : points){
+                point.setToFinal();
+            }
             break;
         default:
             println("Unknown state: "+state.state);

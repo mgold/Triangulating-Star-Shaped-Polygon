@@ -100,6 +100,18 @@ class Point implements Comparable<Point>{
         }
     }
 
+    void setToFinal(){
+        pt = PT_ASSIGN;
+        for (Link link : links){
+            if (link.lt != LT_GONE){
+                link.lt = LT_POLYGON;
+            }
+        }
+        left = right = null;
+        containsKernel = false;
+    }
+
+
     void drawLinks(){
         for (Link link : links){
             link.draw();
@@ -107,7 +119,7 @@ class Point implements Comparable<Point>{
     }
 
     void draw(Point head){
-        if (this == head){
+        if (this == head && pt != PT_ASSIGN){
             noFill();
             strokeWeight(2);
             stroke(#FF00FF);
