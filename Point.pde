@@ -119,12 +119,6 @@ class Point implements Comparable<Point>{
     }
 
     void draw(Point head){
-        if (this == head && pt != PT_ASSIGN){
-            noFill();
-            strokeWeight(2);
-            stroke(#FF00FF);
-            ellipse(x,y,2*r,2*r);
-        }
         noStroke();
         switch(pt){
             case PT_KERNEL:

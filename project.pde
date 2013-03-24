@@ -7,6 +7,7 @@ final int STATEDELAY = 150;
 ArrayList<Point> points;
 Point kernel;
 Point head;
+Coin marker;
 int idcounter;
 
 State state; //No enums in Processing
@@ -53,6 +54,7 @@ void setup(){
     state = new State();
     shouldDrawEdges = false;
     head = null;
+    marker = null;
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
@@ -85,7 +87,6 @@ void update(){
         case SORT:
             Collections.sort(points);
             shouldDrawEdges = true;
-            head = points.get(0);
             for (int i = 0; i < points.size(); i++){
                 Point current = points.get(i);
                 current.addLinkTo(points.get((i+1)%points.size()));
@@ -97,10 +98,14 @@ void update(){
                 current.setConvex();
                 current.setContainsKernel();
             }
+            head = points.get(0);
+            marker = new Coin(head);
             state.next();
             state.timer = 2;
             break;
         case FLIP:
+
+            //check if we're done
             if (state.timer > STATEDELAY){
                 boolean seenReflexOrConvexWithoutKernel = false;
                 for (Point point : points){
@@ -116,6 +121,7 @@ void update(){
                     state.timer = 1;
                 }
             }
+
             if (state.timer == 1){
                 Point head0 = null;
                 while (head != head0){
@@ -123,6 +129,7 @@ void update(){
                         head0 = head;
                     }
                     if (head.pt == PT_CONVEX && !head.containsKernel){
+                        marker.next();
                         head.removeKernelLink();
                         head.left.addLinkTo(head.right);
                         head.left.right = head.right;
@@ -136,15 +143,18 @@ void update(){
                         head = newHead;
                         break;
                     }
+                    marker.next();
                     head = head.right;
                 }
             }
             break;
+
         case FINAL:
             kernel.setToGone();
             for (Point point : points){
                 point.setToFinal();
             }
+            marker.disable();
             break;
         default:
             println("Unknown state: "+state.state);
@@ -168,6 +178,10 @@ void draw(){
         point.draw(head);
     }
     kernel.draw(head);
+
+    if (marker != null){
+        marker.draw(state.timer/float(STATEDELAY));
+    }
 
     stroke(#000000);
     line(0,width,width,width);
