@@ -99,55 +99,35 @@ void update(){
                 current.setContainsKernel();
             }
             head = points.get(0);
-            marker = new Coin(head);
+            marker = new Coin(head.left);
             state.next();
-            state.timer = 2;
+            state.timer = 1;
             break;
         case FLIP:
-
-            //check if we're done
-            if (state.timer > STATEDELAY){
-                boolean seenReflexOrConvexWithoutKernel = false;
-                for (Point point : points){
-                    if (point.pt == PT_REFLEX ||
-                       (point.pt == PT_CONVEX && ! point.containsKernel)){
-                        seenReflexOrConvexWithoutKernel = true;
-                        break;
-                       }
-                }
-                if (! seenReflexOrConvexWithoutKernel){
-                    state.next();
-                }else{
-                    state.timer = 1;
-                }
+            if (head.right.right.right == head){
+                state.next();
+                break;
             }
-
-            if (state.timer == 1){
-                Point head0 = null;
-                while (head != head0){
-                    if (head0 == null){
-                        head0 = head;
-                    }
-                    if (head.pt == PT_CONVEX && !head.containsKernel){
-                        marker.next();
-                        head.removeKernelLink();
-                        head.left.addLinkTo(head.right);
-                        head.left.right = head.right;
-                        head.right.left = head.left;
-                        head.left.setConvex();
-                        head.left.setContainsKernel();
-                        head.right.setConvex();
-                        head.right.setContainsKernel();
-                        Point newHead = head.right;
-                        head.setToOld();
-                        head = newHead;
-                        break;
-                    }
-                    marker.next();
+            state.timer %= STATEDELAY;
+            if (state.timer == 0){
+                marker.next();
+                if (head.pt == PT_CONVEX && !head.containsKernel){
+                    head.removeKernelLink();
+                    head.left.addLinkTo(head.right);
+                    head.left.right = head.right;
+                    head.right.left = head.left;
+                    head.left.setConvex();
+                    head.left.setContainsKernel();
+                    head.right.setConvex();
+                    head.right.setContainsKernel();
+                    Point newHead = head.right;
+                    head.setToOld();
+                    head = newHead;
+                }else{
                     head = head.right;
                 }
             }
-            break;
+        break;
 
         case FINAL:
             kernel.setToGone();
