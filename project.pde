@@ -61,11 +61,12 @@ void setup(){
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
 
-    legend = new Point [3];
+    legend = new Point [4];
     legend [0] = new Point(LEGENDSPACING, width+  LEGENDSPACING, -1, PT_CONVEX);
     legend [1] = new Point(LEGENDSPACING, width+2*LEGENDSPACING, -1, PT_REFLEX);
     legend [2] = new Point(LEGENDSPACING, width+3*LEGENDSPACING, -1, PT_CONVEX);
     legend [2].containsKernel = true;
+    legend [3] = new Point(LEGENDSPACING, width+4*LEGENDSPACING, -1, PT_OLD);
 }
 
 void update(){
@@ -186,6 +187,7 @@ void draw(){
         text("Convex Point", 1.5*LEGENDSPACING, width+  LEGENDSPACING);
         text("Reflex Point", 1.5*LEGENDSPACING, width+2*LEGENDSPACING);
         text("Convex Point with Kernel", 1.5*LEGENDSPACING, width+3*LEGENDSPACING);
+        text("Already Triangulated", 1.5*LEGENDSPACING, width+4*LEGENDSPACING);
     }
 
     stroke(#000000);
@@ -208,10 +210,6 @@ void mouseClicked(){
             idcounter++;
         }
         break;
-        case FLIP:
-        if (mouseY > width){
-            state.timer = 0;
-        }
         default:
     }
 
