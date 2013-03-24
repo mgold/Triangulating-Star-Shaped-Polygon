@@ -3,8 +3,10 @@ import java.util.*;
 final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 150;
+final int LEGENDSPACING = 20;
 
 ArrayList<Point> points;
+Point legend [];
 Point kernel;
 Point head;
 Coin marker;
@@ -12,6 +14,7 @@ int idcounter;
 
 State state; //No enums in Processing
 boolean shouldDrawEdges;
+boolean shouldDrawLegend;
 
 //TODO: write my own sort because Java's don't work in processing.js
 /*
@@ -58,6 +61,12 @@ void setup(){
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
+
+    legend = new Point [3];
+    legend [0] = new Point(LEGENDSPACING, width+  LEGENDSPACING, -1, PT_CONVEX);
+    legend [1] = new Point(LEGENDSPACING, width+2*LEGENDSPACING, -1, PT_REFLEX);
+    legend [2] = new Point(LEGENDSPACING, width+3*LEGENDSPACING, -1, PT_CONVEX);
+    legend [2].containsKernel = true;
 }
 
 void update(){
@@ -86,7 +95,7 @@ void update(){
 
         case SORT:
             Collections.sort(points);
-            shouldDrawEdges = true;
+            shouldDrawEdges = shouldDrawLegend = true;
             for (int i = 0; i < points.size(); i++){
                 Point current = points.get(i);
                 current.addLinkTo(points.get((i+1)%points.size()));
@@ -129,12 +138,17 @@ void update(){
             }
         break;
 
-        case FINAL:
+        case FINALIZE:
+            shouldDrawLegend = false;
             kernel.setToGone();
             for (Point point : points){
                 point.setToFinal();
             }
             marker.disable();
+            state.next();
+            break;
+        case FINAL:
+            state.timer = 0;
             break;
         default:
             println("Unknown state: "+state.state);
@@ -155,12 +169,24 @@ void draw(){
     }
 
     for (Point point : points) {
-        point.draw(head);
+        point.draw();
     }
-    kernel.draw(head);
+    kernel.draw();
 
     if (marker != null){
         marker.draw(state.timer/float(STATEDELAY));
+    }
+
+    if (shouldDrawLegend){
+        for (Point l : legend){
+            l.draw();
+        }
+        textSize(14);
+        textAlign(LEFT, CENTER);
+        fill(#000000);
+        text("Convex Point", 1.5*LEGENDSPACING, width+  LEGENDSPACING);
+        text("Reflex Point", 1.5*LEGENDSPACING, width+2*LEGENDSPACING);
+        text("Convex Point with Kernel", 1.5*LEGENDSPACING, width+3*LEGENDSPACING);
     }
 
     stroke(#000000);

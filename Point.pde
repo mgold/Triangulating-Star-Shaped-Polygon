@@ -118,7 +118,7 @@ class Point implements Comparable<Point>{
         }
     }
 
-    void draw(Point head){
+    void draw(){
         noStroke();
         switch(pt){
             case PT_KERNEL:
