@@ -4,6 +4,7 @@ final int PT_CONVEX = 2;
 final int PT_REFLEX = 3;
 final int PT_ASSIGN = 4;
 final int PT_GONE = 5;
+final int PT_FINAL = 6;
 
 class Point implements Comparable<Point>{
     float x, y;
@@ -60,8 +61,6 @@ class Point implements Comparable<Point>{
             int lt = -1;
             if (pt == PT_KERNEL || other.pt == PT_KERNEL){
                 lt = LT_KERNEL;
-            }else if(pt == PT_ASSIGN || other.pt == PT_ASSIGN){
-                lt = LT_POLYGON;
             }else{
                 lt = LT_CURRENT;
             }
@@ -101,10 +100,10 @@ class Point implements Comparable<Point>{
     }
 
     void setToFinal(){
-        pt = PT_ASSIGN;
+        pt = PT_FINAL;
         for (Link link : links){
             if (link.lt != LT_GONE){
-                link.lt = LT_POLYGON;
+                link.lt = LT_FINAL;
             }
         }
         left = right = null;
@@ -134,6 +133,7 @@ class Point implements Comparable<Point>{
                 fill(#FF8800);
                 break;
             case PT_ASSIGN:
+            case PT_FINAL:
                 fill(#000000);
                 break;
             case PT_GONE:

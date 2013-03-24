@@ -1,6 +1,6 @@
 final int LT_KERNEL = 0;
 final int LT_OLD = 1;
-final int LT_POLYGON = 2;
+final int LT_FINAL = 2;
 final int LT_CURRENT = 3;
 final int LT_GONE = 4;
 
@@ -23,7 +23,7 @@ class Link {
             case LT_OLD:
                 stroke(#888888);
                 break;
-            case LT_POLYGON:
+            case LT_FINAL:
                 stroke(#000000);
                 break;
             case LT_CURRENT:

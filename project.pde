@@ -40,7 +40,6 @@ float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
 }
 
-
 boolean rightTurn(Point a, Point b, Point c){
     //matrix determinant
     return a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - b.x*a.y - c.x*b.y > 0;
