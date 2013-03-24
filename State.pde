@@ -1,7 +1,7 @@
-final int ASSIGN1 = 0;
-final int ASSIGN2 = 1;
-final int ASSIGN3 = 2;
-final int ASSIGN4 = 3;
+final int BEGIN   = 0;
+final int ASSIGN1 = 1;
+final int ASSIGN2 = 2;
+final int ASSIGN3 = 3;
 final int SORT    = 4;
 final int FLIP    = 5;
 final int FINALIZE= 6;

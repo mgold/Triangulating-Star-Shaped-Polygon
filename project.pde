@@ -72,6 +72,10 @@ void setup(){
 void update(){
     state.tick();
     switch (state.state){
+        case BEGIN:
+            text("Click here to begin.", 5, width);
+            state.timer = 0;
+            break;
         case ASSIGN1:
             text("The red point is in the kernel.", 5, width);
             if (state.timer > STATEDELAY){
@@ -86,11 +90,7 @@ void update(){
             break;
         case ASSIGN3:
             text("Click here when you're done.", 5, width);
-            if (state.timer > STATEDELAY){
-                state.next();
-            }
-            break;
-        case ASSIGN4:
+            state.timer = 0;
             break;
 
         case SORT:
@@ -191,25 +191,30 @@ void draw(){
     }
 
     stroke(#000000);
+    strokeWeight(1);
     line(0,width,width,width);
 
 }
 
 void mouseClicked(){
     switch (state.state){
+        case BEGIN:
+            if (mouseY > width){
+                state.next();
+            }
+            break;
         case ASSIGN1:
         case ASSIGN2:
         case ASSIGN3:
-        case ASSIGN4:
-        if (mouseY > width){
-            if (points.size() > 2){
-                state.next();
+            if (mouseY > width){
+                if (points.size() > 2){
+                    state.next();
+                }
+            }else{
+                points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
+                idcounter++;
             }
-        }else{
-            points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
-            idcounter++;
-        }
-        break;
+            break;
         default:
     }
 
