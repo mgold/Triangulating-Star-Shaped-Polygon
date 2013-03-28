@@ -1,5 +1,3 @@
-import java.util.*;
-
 final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 150;
@@ -15,26 +13,6 @@ int idcounter;
 State state; //No enums in Processing
 boolean shouldDrawEdges;
 boolean shouldDrawLegend;
-
-//TODO: write my own sort because Java's don't work in processing.js
-/*
-void bubbleSort(ArrayList<Point> sortme){
-  for (int i=0; i<sortme.size(); i++) {
-    for (int j=i+1; j<sortme.size(); j++) {
-      Point current = sortme.get(i);
-      Point next = sortme.get(j);
-
-      if (current.angle < next.angle){
-          //swap
-          sortme.remove(current
-          Point temp = current;
-          array[i] = next;
-          array[j] = temp;
-      }
-    }
-  }
-}
-*/
 
 float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
@@ -94,7 +72,14 @@ void update(){
             break;
 
         case SORT:
-            Collections.sort(points);
+            for (int i=0; i<points.size(); i++) {
+                for (int j=0; j<points.size() -1; j++) {
+                    if (points.get(j).angle > points.get(j+1).angle){
+                        Point removed = points.remove(j);
+                        points.add(j+1, removed);
+                    }
+                }
+            }
             shouldDrawEdges = shouldDrawLegend = true;
             for (int i = 0; i < points.size(); i++){
                 Point current = points.get(i);
