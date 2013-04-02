@@ -12,6 +12,7 @@ int idcounter;
 
 State state; //No enums in Processing
 boolean shouldDrawEdges;
+boolean shouldDrawKernelRays;
 boolean shouldDrawLegend;
 
 float bound(float lo, float x, float hi){
@@ -33,6 +34,8 @@ void setup(){
     idcounter = 1;
     state = new State();
     shouldDrawEdges = false;
+    shouldDrawKernelRays = false;
+    shouldDrawLegend = false;
     head = null;
     marker = null;
 
@@ -71,7 +74,8 @@ void update(){
             state.timer = 0;
             break;
 
-        case SORT:
+        case SORT1:
+            //radial sort
             for (int i=0; i<points.size(); i++) {
                 for (int j=0; j<points.size() -1; j++) {
                     if (points.get(j).angle > points.get(j+1).angle){
@@ -80,7 +84,7 @@ void update(){
                     }
                 }
             }
-            shouldDrawEdges = shouldDrawLegend = true;
+            //linked list of all points on polygon
             for (int i = 0; i < points.size(); i++){
                 Point current = points.get(i);
                 current.addLinkTo(points.get((i+1)%points.size()));
@@ -88,16 +92,42 @@ void update(){
                 current.right = points.get((i+1)%points.size());
                 current.right.left = current;
             }
+            shouldDrawEdges = true;
+            state.next();
+        case SORT2:
+            text("Polygon by radial sort.", 5, width);
+            if (state.timer > STATEDELAY){
+                state.next();
+            }
+            break;
+
+        case CONVEX1:
             for (Point current : points){
                 current.setConvex();
                 current.setContainsKernel();
             }
             head = points.get(0);
-            marker = new Coin(head.left);
             state.next();
-            state.timer = 1;
+        case CONVEX2:
+            text("Convex and reflex vertices.", 5, width);
+            if (state.timer > STATEDELAY){
+                state.next();
+            }
             break;
+
+        case RAYS:
+            text("Rays from kernel to vertices.", 5, width);
+            shouldDrawKernelRays = true;
+            if (state.timer > STATEDELAY){
+                state.next();
+            }
+            break;
+
         case FLIP:
+            if (marker == null){
+                marker = new Coin(head.left);
+                shouldDrawLegend = true;
+            }
             if (head.right.right.right == head){
                 state.next();
                 break;
@@ -125,6 +155,7 @@ void update(){
 
         case FINALIZE:
             shouldDrawLegend = false;
+            shouldDrawKernelRays = false;
             kernel.setToGone();
             for (Point point : points){
                 point.setToFinal();

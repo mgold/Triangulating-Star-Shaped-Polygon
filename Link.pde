@@ -18,7 +18,11 @@ class Link {
         strokeWeight(1);
         switch(lt){
             case LT_KERNEL:
-                stroke(#FF8888);
+                if (shouldDrawKernelRays){
+                    stroke(#FF8888);
+                }else{
+                    return;
+                }
                 break;
             case LT_OLD:
                 stroke(#888888);

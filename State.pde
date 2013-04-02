@@ -2,10 +2,14 @@ final int BEGIN   = 0;
 final int ASSIGN1 = 1;
 final int ASSIGN2 = 2;
 final int ASSIGN3 = 3;
-final int SORT    = 4;
-final int FLIP    = 5;
-final int FINALIZE= 6;
-final int FINAL   = 7;
+final int SORT1   = 4;
+final int SORT2   = 5;
+final int CONVEX1 = 6;
+final int CONVEX2 = 7;
+final int RAYS    = 8;
+final int FLIP    = 9;
+final int FINALIZE= 10;
+final int FINAL   = 11;
 
 class State{
     int state;
