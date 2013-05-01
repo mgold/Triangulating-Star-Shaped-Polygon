@@ -1,13 +1,15 @@
 final int KERNELX = 200;
 final int KERNELY = 200;
-final int STATEDELAY = 150;
+final int STATEDELAY = 70;
 final int LEGENDSPACING = 20;
+final color COINSTROKE = #FF00FF;
 
 ArrayList<Point> points;
 Point legend [];
 Point kernel;
 Point head;
 Coin marker;
+Button button;
 int idcounter;
 
 State state; //No enums in Processing
@@ -38,6 +40,7 @@ void setup(){
     shouldDrawLegend = false;
     head = null;
     marker = null;
+    button = new Button(.7*width, width+.5*LEGENDSPACING);
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
@@ -121,6 +124,8 @@ void update(){
             if (state.timer > STATEDELAY){
                 marker = new Coin(head.left);
                 shouldDrawLegend = true;
+                button.enableWithLabel("Step»");
+                button.setStroke(COINSTROKE);
                 state.next();
             }
             break;
@@ -196,6 +201,7 @@ void draw(){
         marker.draw(state.timer/float(STATEDELAY));
     }
 
+    button.draw();
     if (shouldDrawLegend){
         for (Point l : legend){
             l.draw();
@@ -235,7 +241,9 @@ void mouseClicked(){
             }
             break;
         case PAUSE:
-            state.next();
+            if (button.pressed()){
+                state.next();
+            }
             break;
         default:
     }

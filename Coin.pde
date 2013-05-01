@@ -32,7 +32,7 @@ class Coin{
             float y = from.y + scale*dy;
             noFill();
             strokeWeight(2);
-            stroke(#FF00FF);
+            stroke(COINSTROKE);
             ellipse(x,y,r,r);
         }
     }
