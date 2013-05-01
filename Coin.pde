@@ -25,6 +25,8 @@ class Coin{
     void draw(float frac){
         if (from != null && to != null){
             bound(0.0, frac, 1.0);
+            to  .selected = frac > .8;
+            from.selected = frac < .2;
             float scale = sin(frac*HALF_PI);
             float dx = to.x - from.x;
             float dy = to.y - from.y;
