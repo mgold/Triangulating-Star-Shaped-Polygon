@@ -119,15 +119,17 @@ void update(){
             text("Rays from kernel to vertices.", 5, width);
             shouldDrawKernelRays = true;
             if (state.timer > STATEDELAY){
+                marker = new Coin(head.left);
+                shouldDrawLegend = true;
                 state.next();
             }
             break;
 
+        case PAUSE:
+            state.timer = 0;
+            break;
+
         case FLIP:
-            if (marker == null){
-                marker = new Coin(head.left);
-                shouldDrawLegend = true;
-            }
             if (head.right.right.right == head){
                 state.next();
                 break;
@@ -150,6 +152,7 @@ void update(){
                 }else{
                     head = head.right;
                 }
+                state.state = PAUSE;
             }
         break;
 
@@ -230,6 +233,9 @@ void mouseClicked(){
                 points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
                 idcounter++;
             }
+            break;
+        case PAUSE:
+            state.next();
             break;
         default:
     }
