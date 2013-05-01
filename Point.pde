@@ -118,19 +118,19 @@ class Point implements Comparable<Point>{
             for (Link link : links){
                 if (link.a == this){
                     if (link.b == right || link.b == left){
-                        strokeWeight(2);
+                        strokeWeight(3);
                     }else{
                         strokeWeight(1);
                     }
                 }else{
                     if (link.a == right || link.a == left){
-                        strokeWeight(2);
+                        strokeWeight(3);
                     }else{
                         strokeWeight(1);
                     }
+                }
                 link.draw();
                 strokeWeight(1);
-                }
             }
         }else{
             for (Link link : links){
