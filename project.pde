@@ -5,11 +5,13 @@ final int LEGENDSPACING = 20;
 final color COINSTROKE = #FF00FF;
 
 ArrayList<Point> points;
+ArrayList<Point> convexPoints;
 Point legend [];
 Point kernel;
 Point head;
 Coin marker;
 Button button;
+Ring ring;
 int idcounter;
 
 State state; //No enums in Processing
@@ -32,6 +34,7 @@ void setup(){
     textSize(24);
 
     points = new ArrayList();
+    convexPoints = new ArrayList();
     kernel = new Point(KERNELX, KERNELY, 0, PT_KERNEL);
     idcounter = 1;
     state = new State();
@@ -41,6 +44,7 @@ void setup(){
     head = null;
     marker = null;
     button = new Button(.7*width, width+.5*LEGENDSPACING);
+    ring = new Ring();
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
@@ -99,7 +103,7 @@ void update(){
             state.next();
         case SORT2:
             text("Polygon by radial sort.", 5, width);
-            if (state.timer > STATEDELAY){
+            if (state.timer > 2*STATEDELAY){
                 state.next();
             }
             break;
@@ -108,12 +112,15 @@ void update(){
             for (Point current : points){
                 current.setConvex();
                 current.setContainsKernel();
+                if (current.pt == PT_CONVEX){
+                    convexPoints.add(current);
+                }
             }
             head = points.get(0);
             state.next();
         case CONVEX2:
             text("Convex and reflex vertices.", 5, width);
-            if (state.timer > STATEDELAY){
+            if (state.timer > 2*STATEDELAY){
                 state.next();
             }
             break;
@@ -121,7 +128,7 @@ void update(){
         case RAYS:
             text("Rays from kernel to vertices.", 5, width);
             shouldDrawKernelRays = true;
-            if (state.timer > STATEDELAY){
+            if (state.timer > 2*STATEDELAY){
                 marker = new Coin(head.left);
                 shouldDrawLegend = true;
                 button.enableWithLabel("Step»");
@@ -151,6 +158,17 @@ void update(){
                     head.left.setContainsKernel();
                     head.right.setConvex();
                     head.right.setContainsKernel();
+                    int headIndex = convexPoints.indexOf(head);
+                    if (head.left.pt == PT_CONVEX &&
+                        convexPoints.indexOf(head.left) == -1){
+                        convexPoints.add(headIndex, head.left);
+                        headIndex++;
+                    }
+                    if (head.right.pt == PT_CONVEX &&
+                        convexPoints.indexOf(head.right) == -1){
+                        convexPoints.add(headIndex+1, head.right);
+                    }
+                    convexPoints.remove(headIndex);
                     Point newHead = head.right;
                     head.setToOld();
                     head = newHead;
@@ -200,6 +218,8 @@ void draw(){
     if (marker != null){
         marker.draw(state.timer/float(STATEDELAY));
     }
+
+    ring.draw();
 
     button.draw();
     if (shouldDrawLegend){
