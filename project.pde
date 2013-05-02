@@ -149,6 +149,7 @@ void update(){
             state.timer %= STATEDELAY;
             if (state.timer == 0){
                 marker.next();
+                head = marker.from;
                 if (head.pt == PT_CONVEX && !head.containsKernel){
                     head.removeKernelLink();
                     head.left.addLinkTo(head.right);
@@ -187,6 +188,7 @@ void update(){
                 point.setToFinal();
             }
             marker.disable();
+            convexPoints.clear();
             state.next();
             break;
         case FINAL:

@@ -11,7 +11,8 @@ class Coin{
     void next(){
         try{
             from = to;
-            to = from.right;
+            int oldIndex = convexPoints.indexOf(from);
+            to = convexPoints.get((oldIndex+1)%convexPoints.size());
         }catch (NullPointerException e){
             this.disable();
         }

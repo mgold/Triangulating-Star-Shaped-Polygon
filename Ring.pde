@@ -9,16 +9,18 @@ class Ring {
     }
 
     void draw(){
-        stroke(#00FF00);
-        noFill();
-        strokeWeight(2);
-        ellipse(x, y, ri*2, ri*2);
-        for (Point p : convexPoints){
-            float xi = -ri*cos(p.angle) + x;
-            float yi = ri*sin(-1*p.angle) + y;
-            float xf = -ro*cos(p.angle) + x;
-            float yf = ro*sin(-1*p.angle) + y;
-            line(xi, yi, xf, yf);
+        if (convexPoints.size() > 0){
+            stroke(#00FF00);
+            noFill();
+            strokeWeight(2);
+            ellipse(x, y, ri*2, ri*2);
+            for (Point p : convexPoints){
+                float xi = -ri*cos(p.angle) + x;
+                float yi = ri*sin(-1*p.angle) + y;
+                float xf = -ro*cos(p.angle) + x;
+                float yf = ro*sin(-1*p.angle) + y;
+                line(xi, yi, xf, yf);
+            }
         }
     }
 
