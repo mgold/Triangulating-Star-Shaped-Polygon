@@ -147,19 +147,7 @@ class Point implements Comparable<Point>{
             ellipse(x,y, 2, 2);
         }
 
-        float dx = mouseX -x;
-        float dy = mouseY -y;
-        if (dx*dx + dy*dy < r*r){
-            if (left != null && right != null) {
-                strokeWeight(2);
-                stroke(#FF0000);
-                line(x, y, left.x, left.y);
-                stroke(#00FF00);
-                line(x, y, right.x, right.y);
-            }
-        }
+    }
 
-    }//end of draw()
-
-}//end of class
+}
 
