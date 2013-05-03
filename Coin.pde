@@ -2,9 +2,9 @@ class Coin{
     Point from, to;
     float r;
 
-    Coin(Point _from){
+    Coin(Point _from, Point _to){
         from = _from;
-        to = from.right;
+        to = _to;
         r = 10;
     }
 
@@ -26,8 +26,6 @@ class Coin{
     void draw(float frac){
         if (from != null && to != null){
             bound(0.0, frac, 1.0);
-            to  .selected = frac > .8;
-            from.selected = frac < .2;
             float scale = sin(frac*HALF_PI);
             float dx = to.x - from.x;
             float dy = to.y - from.y;

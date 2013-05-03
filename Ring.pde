@@ -1,25 +1,24 @@
 class Ring {
-    float x, y, ri, ro;
+    float x, y, r;
 
     Ring(){
         x = KERNELX;
         y = KERNELY;
-        ri = 180;
-        ro = 190;
+        r = 180;
     }
 
     void draw(){
         if (convexPoints.size() > 0){
-            stroke(#00FF00);
+            stroke(#8888FF);
             noFill();
             strokeWeight(2);
-            ellipse(x, y, ri*2, ri*2);
+            ellipse(x, y, r*2, r*2);
+            fill(#00FF00);
+            noStroke();
             for (Point p : convexPoints){
-                float xi = -ri*cos(p.angle) + x;
-                float yi = ri*sin(-1*p.angle) + y;
-                float xf = -ro*cos(p.angle) + x;
-                float yf = ro*sin(-1*p.angle) + y;
-                line(xi, yi, xf, yf);
+                float _x = -r*cos(   p.angle) + x;
+                float _y =  r*sin(-1*p.angle) + y;
+                ellipse(_x, _y, 5, 5);
             }
         }
     }

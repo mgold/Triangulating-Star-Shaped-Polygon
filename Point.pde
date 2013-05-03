@@ -19,7 +19,6 @@ class Point implements Comparable<Point>{
     Point left;
     Point right;
     boolean containsKernel;
-    boolean selected;
 
     Point(float _x, float _y, int _id, int _pt){
         x = _x;
@@ -34,7 +33,6 @@ class Point implements Comparable<Point>{
 
         left = right = null;
         containsKernel = pt == PT_KERNEL ? true : false;
-        selected = false;
     }
 
     int compareTo(Point other){
@@ -114,28 +112,8 @@ class Point implements Comparable<Point>{
 
 
     void drawLinks(){
-        if (selected){
-            for (Link link : links){
-                if (link.a == this){
-                    if (link.b == right || link.b == left){
-                        strokeWeight(3);
-                    }else{
-                        strokeWeight(1);
-                    }
-                }else{
-                    if (link.a == right || link.a == left){
-                        strokeWeight(3);
-                    }else{
-                        strokeWeight(1);
-                    }
-                }
-                link.draw();
-                strokeWeight(1);
-            }
-        }else{
-            for (Link link : links){
-                link.draw();
-            }
+        for (Link link : links){
+            link.draw();
         }
     }
 

@@ -31,7 +31,7 @@ class Link {
                 stroke(#000000);
                 break;
             case LT_CURRENT:
-                stroke(#8888FF);
+                stroke(#000000);
                 break;
             case LT_GONE:
                 return;
