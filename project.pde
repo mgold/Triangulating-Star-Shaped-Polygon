@@ -116,7 +116,7 @@ void update(){
                     convexPoints.add(current);
                 }
             }
-            head = points.get(0);
+            head = convexPoints.get(0);
             state.next();
         case CONVEX2:
             text("Convex and reflex vertices.", 5, width);
@@ -129,7 +129,7 @@ void update(){
             text("Rays from kernel to vertices.", 5, width);
             shouldDrawKernelRays = true;
             if (state.timer > 2*STATEDELAY){
-                marker = new Coin(head.left);
+                marker = new Coin(head);
                 shouldDrawLegend = true;
                 button.enableWithLabel("Step»");
                 button.setStroke(COINSTROKE);
