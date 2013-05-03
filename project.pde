@@ -9,6 +9,7 @@ ArrayList<Point> convexPoints;
 Point legend [];
 Point kernel;
 Point head;
+Point from, to;
 Coin marker;
 Button button;
 Ring ring;
@@ -128,8 +129,9 @@ void update(){
             text("Rays from kernel to vertices.", 5, width);
             shouldDrawKernelRays = true;
             if (state.timer > 2*STATEDELAY){
-                head = convexPoints.get(0);
-                marker = new Coin(head, convexPoints.get(1));
+                from = head = convexPoints.get(0);
+                to = convexPoints.get(1);
+                marker = new Coin();
                 shouldDrawLegend = true;
                 button.enableWithLabel("Step»");
                 button.setStroke(COINSTROKE);
@@ -149,7 +151,7 @@ void update(){
             state.timer %= STATEDELAY;
             if (state.timer == 0){
                 marker.next();
-                head = marker.from;
+                head = from;
                 if (head.pt == PT_CONVEX && !head.containsKernel){
                     head.removeKernelLink();
                     head.left.addLinkTo(head.right);
@@ -168,6 +170,7 @@ void update(){
                     if (head.right.pt == PT_CONVEX &&
                         convexPoints.indexOf(head.right) == -1){
                         convexPoints.add(headIndex+1, head.right);
+                        to = head.right;
                     }
                     convexPoints.remove(headIndex);
                     Point newHead = head.right;

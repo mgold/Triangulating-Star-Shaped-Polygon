@@ -1,10 +1,7 @@
 class Coin{
-    Point from, to;
     float r;
 
-    Coin(Point _from, Point _to){
-        from = _from;
-        to = _to;
+    Coin(){
         r = 10;
     }
 
