@@ -9,6 +9,7 @@ final int PT_FINAL = 6;
 class Point implements Comparable<Point>{
     float x, y;
     float r;
+    float rx, ry;
     int id;
     int pt;
 
@@ -30,6 +31,8 @@ class Point implements Comparable<Point>{
         angle = atan2(KERNELY-y, KERNELX-x);
         kernelDist = dist(KERNELX, KERNELY, x, y);
         links = new ArrayList();
+        rx = -ring.r*cos(   angle) + KERNELX;
+        ry =  ring.r*sin(-1*angle) + KERNELY;
 
         left = right = null;
         containsKernel = pt == PT_KERNEL ? true : false;

@@ -16,12 +16,10 @@ class Ring {
             noStroke();
             for (Point p : convexPoints){
                 fill(#00FF00);
-                float px = -r*cos(   p.angle) + x;
-                float py =  r*sin(-1*p.angle) + y;
-                ellipse(px, py, 5, 5);
+                ellipse(p.rx, p.ry, p.r, p.r);
                 if (p.containsKernel){
                     fill(#FF0000);
-                    ellipse(px,py, 2, 2);
+                    ellipse(p.rx,p.ry, 2, 2);
                 }
             }
         }

@@ -32,6 +32,11 @@ class Coin{
             strokeWeight(2);
             stroke(COINSTROKE);
             ellipse(x,y,r,r);
+            dx = to.rx - from.rx;
+            dy = to.ry - from.ry;
+            x = from.rx + scale*dx;
+            y = from.ry + scale*dy;
+            ellipse(x,y,r,r);
         }
     }
 

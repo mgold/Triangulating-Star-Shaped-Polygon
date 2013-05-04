@@ -36,6 +36,7 @@ void setup(){
 
     points = new ArrayList();
     convexPoints = new ArrayList();
+    ring = new Ring();
     kernel = new Point(KERNELX, KERNELY, 0, PT_KERNEL);
     idcounter = 1;
     state = new State();
@@ -45,7 +46,6 @@ void setup(){
     head = null;
     marker = null;
     button = new Button(.7*width, width+.5*LEGENDSPACING);
-    ring = new Ring();
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
