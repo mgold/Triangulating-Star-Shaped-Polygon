@@ -32,10 +32,10 @@ class Coin{
             strokeWeight(2);
             stroke(COINSTROKE);
             ellipse(x,y,r,r);
-            dx = to.rx - from.rx;
-            dy = to.ry - from.ry;
-            x = from.rx + scale*dx;
-            y = from.ry + scale*dy;
+            float dtheta = to.angle - from.angle;
+            float theta = (from.angle + dtheta*scale);
+            x = -ring.r*cos(   theta) + KERNELX;
+            y =  ring.r*sin(-1*theta) + KERNELY;
             ellipse(x,y,r,r);
         }
     }
