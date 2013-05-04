@@ -32,7 +32,7 @@ class Coin{
             strokeWeight(2);
             stroke(COINSTROKE);
             ellipse(x,y,r,r);
-            float dtheta = to.angle - from.angle;
+            float dtheta = (to.angle - from.angle + TWO_PI) % TWO_PI;
             float theta = (from.angle + dtheta*scale);
             x = -ring.r*cos(   theta) + KERNELX;
             y =  ring.r*sin(-1*theta) + KERNELY;
