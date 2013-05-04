@@ -17,8 +17,8 @@ class Point implements Comparable<Point>{
     float kernelDist;
     ArrayList<Link> links;
 
-    Point left;
-    Point right;
+    Point left, right;
+    Point origLeft, origRight;
     boolean containsKernel;
 
     Point(float _x, float _y, int _id, int _pt){
@@ -34,12 +34,28 @@ class Point implements Comparable<Point>{
         rx = -ring.r*cos(   angle) + KERNELX;
         ry =  ring.r*sin(-1*angle) + KERNELY;
 
-        left = right = null;
+        left = right = origLeft = origRight = null;
         containsKernel = pt == PT_KERNEL ? true : false;
     }
 
     int compareTo(Point other){
         return int(10000*(angle - other.angle));
+    }
+
+    void setLeft(Point l){
+        origLeft = left = l;
+    }
+
+    void setRight(Point r){
+        origRight = right = r;
+    }
+
+    void reset(){
+        left = origLeft;
+        right = origRight;
+        pt = PT_ASSIGN;
+        setConvex();
+        setContainsKernel();
     }
 
     void setConvex(){
@@ -99,6 +115,13 @@ class Point implements Comparable<Point>{
         pt = PT_GONE;
         for (Link link : links){
             link.lt = LT_GONE;
+        }
+    }
+
+    void setAsKernel(){
+        pt = PT_KERNEL;
+        for (Link link : links){
+            link.lt = LT_KERNEL;
         }
     }
 

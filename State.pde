@@ -7,10 +7,11 @@ final int SORT2   = 5;
 final int CONVEX1 = 6;
 final int CONVEX2 = 7;
 final int RAYS    = 8;
-final int PAUSE   = 9;
-final int FLIP    = 10;
-final int FINALIZE= 11;
-final int FINAL   = 12;
+final int SETUP   = 9;
+final int PAUSE   = 10;
+final int FLIP    = 11;
+final int FINALIZE= 12;
+final int FINAL   = 13;
 
 class State{
     int state;

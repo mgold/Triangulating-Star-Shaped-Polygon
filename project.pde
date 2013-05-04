@@ -97,8 +97,8 @@ void update(){
                 Point current = points.get(i);
                 current.addLinkTo(points.get((i+1)%points.size()));
                 kernel.addLinkTo(current);
-                current.right = points.get((i+1)%points.size());
-                current.right.left = current;
+                current.setRight(points.get((i+1)%points.size()));
+                current.right.setLeft(current);
             }
             shouldDrawEdges = true;
             state.next();
@@ -129,14 +129,19 @@ void update(){
             text("Rays from kernel to vertices.", 5, width);
             shouldDrawKernelRays = true;
             if (state.timer > 2*STATEDELAY){
-                from = head = convexPoints.get(0);
-                to = convexPoints.get(1);
-                marker = new Coin();
-                shouldDrawLegend = true;
-                button.enableWithLabel("Step»");
-                button.setStroke(COINSTROKE);
                 state.next();
             }
+            break;
+
+        case SETUP:
+            from = head = convexPoints.get(0);
+            to = convexPoints.get(1);
+            marker = new Coin();
+            shouldDrawLegend = true;
+            button.enableWithLabel("Step»");
+            button.setStroke(COINSTROKE);
+            state.timer = 0;
+            state.next();
             break;
 
         case PAUSE:
@@ -192,6 +197,8 @@ void update(){
             }
             marker.disable();
             convexPoints.clear();
+            button.enableWithLabel("Reset↺");
+            button.setStroke(#FF0000);
             state.next();
             break;
         case FINAL:
@@ -286,6 +293,18 @@ void mouseClicked(){
                 state.next();
             }
             break;
+        case FINAL:
+            if (button.pressed()){
+                for (Point p : points){
+                    p.reset();
+                    if (p.pt == PT_CONVEX){
+                        convexPoints.add(p);
+                    }
+                }
+                kernel.setAsKernel();
+                state.state = SETUP;
+            }
+
         default:
     }
 
