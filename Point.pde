@@ -51,11 +51,14 @@ class Point implements Comparable<Point>{
     }
 
     void reset(){
+        links.clear();
         left = origLeft;
         right = origRight;
         pt = PT_ASSIGN;
         setConvex();
         setContainsKernel();
+        addLinkTo(left);
+        addLinkTo(right);
     }
 
     void setConvex(){
@@ -90,7 +93,9 @@ class Point implements Comparable<Point>{
     }
 
     void addLink(Link link){
-        links.add(link);
+        if (links.indexOf(link) == -1){
+            links.add(link);
+        }
     }
 
     void removeKernelLink(){

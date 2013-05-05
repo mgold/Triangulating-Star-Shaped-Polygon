@@ -294,16 +294,18 @@ void mouseClicked(){
             }
             break;
         case FINAL:
+            shouldDrawKernelRays = true;
             if (button.pressed()){
+                kernel.setAsKernel();
                 for (Point p : points){
                     p.reset();
                     if (p.pt == PT_CONVEX){
                         convexPoints.add(p);
                     }
                 }
-                kernel.setAsKernel();
                 state.state = SETUP;
             }
+            break;
 
         default:
     }
