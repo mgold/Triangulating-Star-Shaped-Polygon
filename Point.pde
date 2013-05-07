@@ -8,7 +8,7 @@ final int PT_FINAL = 6;
 
 class Point implements Comparable<Point>{
     float x, y;
-    float r;
+    float r, R, dr;
     float rx, ry;
     int id;
     int pt;
@@ -26,7 +26,8 @@ class Point implements Comparable<Point>{
         y = _y;
         id = _id;
         pt = _pt;
-        r = 5;
+        R = r = 5;
+        dr = 0;
 
         angle = atan2(KERNELY-y, KERNELX-x);
         kernelDist = dist(KERNELX, KERNELY, x, y);
@@ -64,7 +65,12 @@ class Point implements Comparable<Point>{
     void setConvex(){
         if ((pt == PT_REFLEX || pt == PT_CONVEX || pt == PT_ASSIGN)
             && left != null && right != null){
+            int oldPT = pt;
             pt =  rightTurn(left, this, right) ? PT_CONVEX : PT_REFLEX;
+            if (oldPT != pt && oldPT != PT_ASSIGN){
+                r *= 3;
+                dr = -.4;
+            }
         }
     }
 
@@ -149,6 +155,11 @@ class Point implements Comparable<Point>{
     }
 
     void draw(){
+        r += dr;
+        if (r < R){
+            r = R;
+            dr = 0;
+        }
         noStroke();
         switch(pt){
             case PT_KERNEL:
