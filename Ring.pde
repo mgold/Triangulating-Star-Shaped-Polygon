@@ -5,7 +5,7 @@ class Ring {
     Ring(){
         x = KERNELX;
         y = KERNELY;
-        r = RINGRADIUS;
+        r = 2*RINGRADIUS;
         enabled = false;
     }
 
@@ -22,7 +22,7 @@ class Ring {
             stroke(CHAINSTROKE);
             noFill();
             strokeWeight(2);
-            ellipse(x, y, r*2, r*2);
+            ellipse(x, y, r, r);
             noStroke();
             for (Point p : convexPoints){
                 fill(CONVEXFILL);

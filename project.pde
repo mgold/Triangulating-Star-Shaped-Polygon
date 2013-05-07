@@ -4,6 +4,7 @@ final int STATEDELAY = 70;
 final int INTRODELAY = 175;
 final int LEGENDSPACING = 20;
 final int RINGRADIUS = 180;
+final int FENCERADIUS = 2*RINGRADIUS-5;
 
 final color COINSTROKE = #FF00FF;
 final color CONVEXFILL = #00FF00;
@@ -300,7 +301,7 @@ void draw(){
     if (shouldDrawFence){
         stroke(#000000);
         noFill();
-        ellipse(KERNELX, KERNELY, 2*RINGRADIUS-5, 2*RINGRADIUS-5);
+        ellipse(KERNELX, KERNELY, FENCERADIUS, FENCERADIUS);
         fill(#000000);
         noStroke();
     }
@@ -366,7 +367,7 @@ void mouseClicked(){
                 if (points.size() > 2){
                     state.next();
                 }
-            }else{
+            }else if (dist(KERNELX, KERNELY, mouseX, mouseY) < RINGRADIUS-3){
                 points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
                 idcounter++;
             }
