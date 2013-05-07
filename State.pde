@@ -9,11 +9,13 @@ final int CONVEX2 = 7;
 final int CCHAIN  = 8;
 final int ACHAIN  = 9;
 final int RAYS    = 10;
-final int SETUP   = 11;
-final int PAUSE   = 12;
-final int FLIP    = 13;
-final int FINALIZE= 14;
-final int FINAL   = 15;
+final int SELECTED1=11;
+final int SELECTED2=12;
+final int SETUP   = 13;
+final int PAUSE   = 14;
+final int FLIP    = 15;
+final int FINALIZE= 16;
+final int FINAL   = 17;
 
 class State{
     int state;

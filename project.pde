@@ -176,21 +176,35 @@ void update(){
             break;
 
         case RAYS:
+            shouldDrawKernelRays = true;
             fill(KERNELFILL);
             text("Rays ", 5, width);
             offset = textWidth("Rays ");
             fill(#000000);
             text("from kernel to vertices.", 5+offset, width);
-            shouldDrawKernelRays = true;
+            if (state.timer > INTRODELAY){
+                state.next();
+            }
+            break;
+
+        case SELECTED1:
+            from = head = convexPoints.get(0);
+            to = convexPoints.get(1);
+            marker = new Coin();
+            state.next();
+        case SELECTED2:
+            fill(COINSTROKE);
+            text("Selected ", 5, width);
+            offset = textWidth("Selected ");
+            fill(#000000);
+            text("convex point.", 5+offset, width);
             if (state.timer > INTRODELAY){
                 state.next();
             }
             break;
 
         case SETUP:
-            from = head = convexPoints.get(0);
-            to = convexPoints.get(1);
-            marker = new Coin();
+            marker.unfreeze();
             shouldDrawLegend = true;
             button.enableWithLabel("Step»");
             button.setStroke(COINSTROKE);
@@ -353,6 +367,8 @@ void mouseClicked(){
                         convexPoints.add(p);
                     }
                 }
+                from = head = convexPoints.get(0);
+                to = convexPoints.get(1);
                 state.state = SETUP;
             }
             break;

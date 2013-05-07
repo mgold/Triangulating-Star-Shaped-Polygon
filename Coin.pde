@@ -1,8 +1,10 @@
 class Coin{
     float r;
+    boolean frozen;
 
     Coin(){
         r = 10;
+        frozen = true;
     }
 
     void next(){
@@ -19,8 +21,14 @@ class Coin{
         from = to = null;
     }
 
+    void unfreeze(){
+        frozen = false;
+    }
 
     void draw(float frac){
+        if (frozen){
+            frac = 0;
+        }
         if (from != null && to != null){
             bound(0.0, frac, 1.0);
             float scale = sin(frac*HALF_PI);
