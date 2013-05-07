@@ -15,11 +15,11 @@ class Link {
     }
 
     void draw(){
-        //strokeWeight(1);
+        strokeWeight(1);
         switch(lt){
             case LT_KERNEL:
                 if (shouldDrawKernelRays){
-                    stroke(#FF8888);
+                    stroke(KERNELFILL);
                 }else{
                     return;
                 }

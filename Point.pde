@@ -152,16 +152,16 @@ class Point implements Comparable<Point>{
         noStroke();
         switch(pt){
             case PT_KERNEL:
-                fill(#FF0000);
+                fill(KERNELFILL);
                 break;
             case PT_OLD:
                 fill(#888888);
                 break;
             case PT_CONVEX:
-                fill(#00FF00);
+                fill(CONVEXFILL);
                 break;
             case PT_REFLEX:
-                fill(#FF8800);
+                fill(REFLEXFILL);
                 break;
             case PT_ASSIGN:
             case PT_FINAL:
@@ -174,7 +174,7 @@ class Point implements Comparable<Point>{
         }
         ellipse(x,y,r,r);
         if (containsKernel){
-            fill(#FF0000);
+            fill(KERNELFILL);
             ellipse(x,y, 2, 2);
         }
 

@@ -2,7 +2,12 @@ final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 70;
 final int LEGENDSPACING = 20;
+
 final color COINSTROKE = #FF00FF;
+final color CONVEXFILL = #00FF00;
+final color REFLEXFILL = #FF8800;
+final color KERNELFILL = #FF0000;
+final color CHAINSTROKE= #8888FF;
 
 ArrayList<Point> points;
 ArrayList<Point> convexPoints;
@@ -243,7 +248,7 @@ void draw(){
 
     if(shouldDrawChain){
         strokeWeight(3);
-        stroke(#8888FF);
+        stroke(CHAINSTROKE);
         for (int i = 0; i < convexPoints.size(); i++){
             Point a = convexPoints.get(i);
             Point b = convexPoints.get((i+1)%convexPoints.size());

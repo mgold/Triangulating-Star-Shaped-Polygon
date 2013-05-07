@@ -19,16 +19,16 @@ class Ring {
 
     void draw(){
         if (enabled){
-            stroke(#8888FF);
+            stroke(CHAINSTROKE);
             noFill();
             strokeWeight(2);
             ellipse(x, y, r*2, r*2);
             noStroke();
             for (Point p : convexPoints){
-                fill(#00FF00);
+                fill(CONVEXFILL);
                 ellipse(p.rx, p.ry, p.r, p.r);
                 if (p.containsKernel){
-                    fill(#FF0000);
+                    fill(KERNELFILL);
                     ellipse(p.rx,p.ry, 2, 2);
                 }
             }
