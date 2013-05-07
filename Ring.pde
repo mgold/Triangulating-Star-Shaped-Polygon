@@ -1,14 +1,24 @@
 class Ring {
     float x, y, r;
+    boolean enabled;
 
     Ring(){
         x = KERNELX;
         y = KERNELY;
         r = 180;
+        enabled = false;
+    }
+
+    void enable(){
+        enabled = true;
+    }
+
+    void disable(){
+        enabled = false;
     }
 
     void draw(){
-        if (convexPoints.size() > 0){
+        if (enabled){
             stroke(#8888FF);
             noFill();
             strokeWeight(2);

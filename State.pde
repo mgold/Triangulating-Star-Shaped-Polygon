@@ -6,12 +6,14 @@ final int SORT1   = 4;
 final int SORT2   = 5;
 final int CONVEX1 = 6;
 final int CONVEX2 = 7;
-final int RAYS    = 8;
-final int SETUP   = 9;
-final int PAUSE   = 10;
-final int FLIP    = 11;
-final int FINALIZE= 12;
-final int FINAL   = 13;
+final int CCHAIN  = 8;
+final int ACHAIN  = 9;
+final int RAYS    = 10;
+final int SETUP   = 11;
+final int PAUSE   = 12;
+final int FLIP    = 13;
+final int FINALIZE= 14;
+final int FINAL   = 15;
 
 class State{
     int state;

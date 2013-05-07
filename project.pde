@@ -19,6 +19,7 @@ State state; //No enums in Processing
 boolean shouldDrawEdges;
 boolean shouldDrawKernelRays;
 boolean shouldDrawLegend;
+boolean shouldDrawChain;
 
 float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
@@ -43,6 +44,7 @@ void setup(){
     shouldDrawEdges = false;
     shouldDrawKernelRays = false;
     shouldDrawLegend = false;
+    shouldDrawChain = false;
     head = null;
     marker = null;
     button = new Button(.7*width, width+.5*LEGENDSPACING);
@@ -104,7 +106,7 @@ void update(){
             state.next();
         case SORT2:
             text("Polygon by radial sort.", 5, width);
-            if (state.timer > 2*STATEDELAY){
+            if (state.timer > 3*STATEDELAY){
                 state.next();
             }
             break;
@@ -120,7 +122,23 @@ void update(){
             state.next();
         case CONVEX2:
             text("Convex and reflex vertices.", 5, width);
-            if (state.timer > 2*STATEDELAY){
+            if (state.timer > 3*STATEDELAY){
+                state.next();
+            }
+            break;
+
+        case CCHAIN:
+            shouldDrawChain = true;
+            text("Concrete chain of convex vertices.", 5, width);
+            if (state.timer > 3*STATEDELAY){
+                state.next();
+            }
+            break;
+
+        case ACHAIN:
+            ring.enable();
+            text("Abstract chain of convex vertices.", 5, width);
+            if (state.timer > 3*STATEDELAY){
                 state.next();
             }
             break;
@@ -128,7 +146,7 @@ void update(){
         case RAYS:
             text("Rays from kernel to vertices.", 5, width);
             shouldDrawKernelRays = true;
-            if (state.timer > 2*STATEDELAY){
+            if (state.timer > 3*STATEDELAY){
                 state.next();
             }
             break;
@@ -191,6 +209,7 @@ void update(){
         case FINALIZE:
             shouldDrawLegend = false;
             shouldDrawKernelRays = false;
+            ring.disable();
             kernel.setToGone();
             for (Point point : points){
                 point.setToFinal();
@@ -220,15 +239,9 @@ void draw(){
         for (Point p : points){
             p.drawLinks();
         }
-        /*
-        strokeWeight(1);
-        stroke(#000000);
-        for (int i = 0; i < points.size(); i++){
-            Point a = points.get(i);
-            Point b = points.get((i+1)%points.size());
-            line(a.x, a.y, b.x, b.y);
-        }
-        */
+    }
+
+    if(shouldDrawChain){
         strokeWeight(3);
         stroke(#8888FF);
         for (int i = 0; i < convexPoints.size(); i++){
@@ -294,8 +307,9 @@ void mouseClicked(){
             }
             break;
         case FINAL:
-            shouldDrawKernelRays = true;
             if (button.pressed()){
+                shouldDrawKernelRays = true;
+                ring.enable();
                 kernel.setAsKernel();
                 for (Point p : points){
                     p.reset();
