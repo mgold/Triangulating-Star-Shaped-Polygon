@@ -31,8 +31,8 @@ class Point implements Comparable<Point>{
         angle = atan2(KERNELY-y, KERNELX-x);
         kernelDist = dist(KERNELX, KERNELY, x, y);
         links = new ArrayList();
-        rx = -ring.r*cos(   angle) + KERNELX;
-        ry =  ring.r*sin(-1*angle) + KERNELY;
+        rx = -RINGRADIUS*cos(   angle) + KERNELX;
+        ry =  RINGRADIUS*sin(-1*angle) + KERNELY;
 
         left = right = origLeft = origRight = null;
         containsKernel = pt == PT_KERNEL ? true : false;

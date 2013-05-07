@@ -3,6 +3,7 @@ final int KERNELY = 200;
 final int STATEDELAY = 70;
 final int INTRODELAY = 175;
 final int LEGENDSPACING = 20;
+final int RINGRADIUS = 180;
 
 final color COINSTROKE = #FF00FF;
 final color CONVEXFILL = #00FF00;
@@ -27,6 +28,7 @@ boolean shouldDrawEdges;
 boolean shouldDrawKernelRays;
 boolean shouldDrawLegend;
 boolean shouldDrawChain;
+boolean shouldDrawFence;
 
 float bound(float lo, float x, float hi){
     return min(hi, max(lo, x));
@@ -52,6 +54,7 @@ void setup(){
     shouldDrawKernelRays = false;
     shouldDrawLegend = false;
     shouldDrawChain = false;
+    shouldDrawFence = false;
     head = null;
     marker = null;
     offset = 0;
@@ -76,13 +79,21 @@ void update(){
             state.timer = 0;
             break;
         case ASSIGN1:
-            text("The red point is in the kernel.", 5, width);
+            fill(#000000);
+            text("The red point is in the ", 5, width);
+            offset = textWidth("The red point is in the ");
+            fill(KERNELFILL);
+            text("kernel", 5+offset, width);
+            offset += textWidth("kernel");
+            fill(#000000);
+            text(".", 5+offset, width);
             if (state.timer > STATEDELAY){
                 state.next();
             }
             break;
         case ASSIGN2:
-            text("Click in the box to add points.", 5, width);
+            shouldDrawFence = true;
+            text("Click in the ring to add points.", 5, width);
             if (state.timer > STATEDELAY){
                 state.next();
             }
@@ -93,6 +104,7 @@ void update(){
             break;
 
         case SORT1:
+            shouldDrawFence = false;
             //radial sort
             for (int i=0; i<points.size(); i++) {
                 for (int j=0; j<points.size() -1; j++) {
@@ -281,11 +293,19 @@ void update(){
 void draw(){
     background(#FFFFFF);
     fill(#000000);
+    noStroke();
 
     update();
 
+    if (shouldDrawFence){
+        stroke(#000000);
+        noFill();
+        ellipse(KERNELX, KERNELY, 2*RINGRADIUS-5, 2*RINGRADIUS-5);
+        fill(#000000);
+        noStroke();
+    }
+
     if (shouldDrawEdges){
-        kernel.drawLinks();
         for (Point p : points){
             p.drawLinks();
         }
@@ -358,17 +378,18 @@ void mouseClicked(){
             break;
         case FINAL:
             if (button.pressed()){
-                shouldDrawKernelRays = true;
-                ring.enable();
                 kernel.setAsKernel();
                 for (Point p : points){
                     p.reset();
+                    p.addLinkTo(kernel);
                     if (p.pt == PT_CONVEX){
                         convexPoints.add(p);
                     }
                 }
                 from = head = convexPoints.get(0);
                 to = convexPoints.get(1);
+                ring.enable();
+                shouldDrawKernelRays = true;
                 state.state = SETUP;
             }
             break;

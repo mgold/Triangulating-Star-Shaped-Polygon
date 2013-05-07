@@ -5,7 +5,7 @@ class Ring {
     Ring(){
         x = KERNELX;
         y = KERNELY;
-        r = 180;
+        r = RINGRADIUS;
         enabled = false;
     }
 
