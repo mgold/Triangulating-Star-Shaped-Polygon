@@ -1,6 +1,7 @@
 final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 70;
+final int INTRODELAY = 175;
 final int LEGENDSPACING = 20;
 
 final color COINSTROKE = #FF00FF;
@@ -19,6 +20,7 @@ Coin marker;
 Button button;
 Ring ring;
 int idcounter;
+float offset;
 
 State state; //No enums in Processing
 boolean shouldDrawEdges;
@@ -52,6 +54,7 @@ void setup(){
     shouldDrawChain = false;
     head = null;
     marker = null;
+    offset = 0;
     button = new Button(.7*width, width+.5*LEGENDSPACING);
 
     //Comment out on processing.js
@@ -111,7 +114,7 @@ void update(){
             state.next();
         case SORT2:
             text("Polygon by radial sort.", 5, width);
-            if (state.timer > 3*STATEDELAY){
+            if (state.timer > INTRODELAY){
                 state.next();
             }
             break;
@@ -126,32 +129,60 @@ void update(){
             }
             state.next();
         case CONVEX2:
-            text("Convex and reflex vertices.", 5, width);
-            if (state.timer > 3*STATEDELAY){
+            fill(CONVEXFILL);
+            text("Convex ", 5, width);
+            offset = textWidth("Convex ");
+            fill(#000000);
+            text("and ", 5+offset, width);
+            offset += textWidth("and ");
+            fill(REFLEXFILL);
+            text("reflex ", 5+offset, width);
+            offset += textWidth("reflex ");
+            fill(#000000);
+            text("vertices. ", 5+offset, width);
+            if (state.timer > INTRODELAY){
                 state.next();
             }
             break;
 
         case CCHAIN:
             shouldDrawChain = true;
-            text("Concrete chain of convex vertices.", 5, width);
-            if (state.timer > 3*STATEDELAY){
+            fill(#000000);
+            text("Concrete ", 5, width);
+            offset = textWidth("Concrete ");
+            fill(CHAINSTROKE);
+            text("chain ", 5+offset, width);
+            offset += textWidth("chain ");
+            fill(#000000);
+            text("of convex vertices", 5+offset, width);
+            if (state.timer > INTRODELAY){
                 state.next();
             }
             break;
 
         case ACHAIN:
             ring.enable();
-            text("Abstract chain of convex vertices.", 5, width);
-            if (state.timer > 3*STATEDELAY){
+            fill(#000000);
+            text("Abstract ", 5, width);
+            offset = textWidth("Abstract ");
+            fill(CHAINSTROKE);
+            text("chain ", 5+offset, width);
+            offset += textWidth("chain ");
+            fill(#000000);
+            text("of convex vertices", 5+offset, width);
+            if (state.timer > INTRODELAY){
                 state.next();
             }
             break;
 
         case RAYS:
-            text("Rays from kernel to vertices.", 5, width);
+            fill(KERNELFILL);
+            text("Rays ", 5, width);
+            offset = textWidth("Rays ");
+            fill(#000000);
+            text("from kernel to vertices.", 5+offset, width);
             shouldDrawKernelRays = true;
-            if (state.timer > 3*STATEDELAY){
+            if (state.timer > INTRODELAY){
                 state.next();
             }
             break;
