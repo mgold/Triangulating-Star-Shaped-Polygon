@@ -68,8 +68,8 @@ class Point implements Comparable<Point>{
             int oldPT = pt;
             pt =  rightTurn(left, this, right) ? PT_CONVEX : PT_REFLEX;
             if (oldPT != pt && oldPT != PT_ASSIGN){
-                r *= 3;
-                dr = -.4;
+                r *= 4;
+                dr = -.3;
             }
         }
     }
@@ -160,7 +160,6 @@ class Point implements Comparable<Point>{
             r = R;
             dr = 0;
         }
-        noStroke();
         switch(pt){
             case PT_KERNEL:
                 fill(KERNELFILL);
@@ -183,10 +182,13 @@ class Point implements Comparable<Point>{
             default:
                 fill(#FFFF00);
         }
-        ellipse(x,y,r,r);
-        if (containsKernel){
-            fill(KERNELFILL);
-            ellipse(x,y, 2, 2);
+        if (containsKernel && pt != PT_KERNEL){
+            strokeWeight(1);
+            stroke(KERNELFILL);
+            ellipse(x,y,r+1,r+1);
+        }else{
+            noStroke();
+            ellipse(x,y,r,r);
         }
 
     }

@@ -1,13 +1,13 @@
 final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 70;
-final int INTRODELAY = 175;
+final int INTRODELAY = 200;
 final int LEGENDSPACING = 20;
 final int RINGRADIUS = 180;
 final int FENCERADIUS = 2*RINGRADIUS-5;
 
 final color COINSTROKE = #FF00FF;
-final color CONVEXFILL = #00FF00;
+final color CONVEXFILL = #008800;
 final color REFLEXFILL = #FF8800;
 final color KERNELFILL = #FF0000;
 final color CHAINSTROKE= #8888FF;
