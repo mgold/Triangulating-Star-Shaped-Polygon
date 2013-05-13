@@ -1,10 +1,10 @@
 final int KERNELX = 200;
 final int KERNELY = 200;
 final int STATEDELAY = 70;
-final int INTRODELAY = 200;
 final int LEGENDSPACING = 20;
 final int RINGRADIUS = 180;
 final int FENCERADIUS = 2*RINGRADIUS-5;
+final int INTROTEXTSIZE = 24;
 
 final color COINSTROKE = #FF00FF;
 final color CONVEXFILL = #008800;
@@ -43,7 +43,7 @@ boolean rightTurn(Point a, Point b, Point c){
 void setup(){
     size(400,500);
     textAlign(LEFT, TOP);
-    textSize(24);
+    textSize(INTROTEXTSIZE);
 
     points = new ArrayList();
     convexPoints = new ArrayList();
@@ -88,14 +88,14 @@ void update(){
             offset += textWidth("kernel");
             fill(#000000);
             text(".", 5+offset, width);
-            if (state.timer > STATEDELAY){
+            if (state.timer > 2*STATEDELAY){
                 state.next();
             }
             break;
         case ASSIGN2:
             shouldDrawFence = true;
             text("Click in the ring to add points.", 5, width);
-            if (state.timer > STATEDELAY){
+            if (state.timer > 2*STATEDELAY){
                 state.next();
             }
             break;
@@ -127,9 +127,11 @@ void update(){
             state.next();
         case SORT2:
             text("Polygon by radial sort.", 5, width);
-            if (state.timer > INTRODELAY){
-                state.next();
-            }
+            textSize(16);
+            fill(#888888);
+            text("Click below the line to progress.", 5, width + INTROTEXTSIZE+5);
+            fill(#000000);
+            textSize(INTROTEXTSIZE);
             break;
 
         case CONVEX1:
@@ -153,9 +155,11 @@ void update(){
             offset += textWidth("reflex ");
             fill(#000000);
             text("vertices. ", 5+offset, width);
-            if (state.timer > INTRODELAY){
-                state.next();
-            }
+            textSize(16);
+            fill(#888888);
+            text("Keep clicking...", 5, width + INTROTEXTSIZE+5);
+            fill(#000000);
+            textSize(INTROTEXTSIZE);
             break;
 
         case CCHAIN:
@@ -168,9 +172,6 @@ void update(){
             offset += textWidth("chain ");
             fill(#000000);
             text("of convex vertices", 5+offset, width);
-            if (state.timer > INTRODELAY){
-                state.next();
-            }
             break;
 
         case ACHAIN:
@@ -183,9 +184,6 @@ void update(){
             offset += textWidth("chain ");
             fill(#000000);
             text("of convex vertices", 5+offset, width);
-            if (state.timer > INTRODELAY){
-                state.next();
-            }
             break;
 
         case RAYS:
@@ -195,9 +193,6 @@ void update(){
             offset = textWidth("Rays ");
             fill(#000000);
             text("from kernel to vertices.", 5+offset, width);
-            if (state.timer > INTRODELAY){
-                state.next();
-            }
             break;
 
         case SELECTED1:
@@ -211,9 +206,6 @@ void update(){
             offset = textWidth("Selected ");
             fill(#000000);
             text("convex point.", 5+offset, width);
-            if (state.timer > INTRODELAY){
-                state.next();
-            }
             break;
 
         case SETUP:
@@ -356,12 +348,19 @@ void draw(){
 void mouseClicked(){
     switch (state.state){
         case BEGIN:
+        case ASSIGN1:
+        case ASSIGN2:
+        case SORT2:
+        case CONVEX2:
+        case CCHAIN:
+        case ACHAIN:
+        case RAYS:
+        case SELECTED2:
             if (mouseY > width){
                 state.next();
             }
             break;
-        case ASSIGN1:
-        case ASSIGN2:
+
         case ASSIGN3:
             if (mouseY > width){
                 if (points.size() > 2){
