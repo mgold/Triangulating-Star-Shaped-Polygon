@@ -36,8 +36,10 @@ to create a star-shaped polygon. Then watch the alogrithm unfold.
 For best results, avoid placing points in too close an arc from the central
 kernel, and putting three points on a line.
 
-The code is written in Processing, a graphics wrapper around Java. Soon I'll
-get it ported to processing.js so it can run in your webbrowser.
+The code is written in Processing, a graphics wrapper around Java. Thanks to
+processing.js, you can see a
+[demonstration](http://www.eecs.tufts.edu/~mgolds07/triangulate/) run in your
+webbrowser.
 
 ##And you did this why?
 As a project for my class in Computational Geometry at Tufts University, in spring 2013.
