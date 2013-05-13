@@ -19,7 +19,6 @@ Point kernel;
 Point head;
 Point from, to;
 Coin marker;
-Button button;
 Ring ring;
 int idcounter;
 float offset;
@@ -38,6 +37,13 @@ float bound(float lo, float x, float hi){
 boolean rightTurn(Point a, Point b, Point c){
     //matrix determinant
     return a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - b.x*a.y - c.x*b.y > 0;
+}
+
+void newPoint(){
+    if (dist(KERNELX, KERNELY, mouseX, mouseY) < RINGRADIUS-3){
+        points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
+        idcounter++;
+    }
 }
 
 void setup(){
@@ -59,7 +65,6 @@ void setup(){
     head = null;
     marker = null;
     offset = 0;
-    button = new Button(.7*width, width+.5*LEGENDSPACING);
 
     //Comment out on processing.js
     frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
@@ -211,8 +216,6 @@ void update(){
         case SETUP:
             marker.unfreeze();
             shouldDrawLegend = true;
-            button.enableWithLabel("Step»");
-            button.setStroke(COINSTROKE);
             state.timer = 0;
             state.next();
             break;
@@ -271,8 +274,6 @@ void update(){
             }
             marker.disable();
             convexPoints.clear();
-            button.enableWithLabel("Reset↺");
-            button.setStroke(#FF0000);
             state.next();
             break;
         case FINAL:
@@ -325,7 +326,6 @@ void draw(){
 
     ring.draw();
 
-    button.draw();
     if (shouldDrawLegend){
         for (Point l : legend){
             l.draw();
@@ -339,6 +339,30 @@ void draw(){
         text("Already Triangulated", 1.5*LEGENDSPACING, width+4*LEGENDSPACING);
     }
 
+    if (state.state == PAUSE || state.state == FLIP){
+        textSize(16);
+        fill(#888888);
+        text("Click to ", .7*width, width+20);
+        offset = textWidth("Click to ");
+        fill(COINSTROKE);
+        text("step", .7*width+offset, width+20);
+        offset += textWidth("step");
+        fill(#888888);
+        text("»", .7*width+offset, width+20);
+    }
+
+    if (state.state == FINAL){
+        textSize(16);
+        fill(#888888);
+        text("Click to ", .7*width, width+20);
+        offset = textWidth("Click to ");
+        fill(#FF0000);
+        text("reset", .7*width+offset, width+20);
+        offset += textWidth("reset");
+        fill(#888888);
+        text("↺", .7*width+offset, width+20);
+    }
+
     stroke(#000000);
     strokeWeight(1);
     line(0,width,width,width);
@@ -348,8 +372,6 @@ void draw(){
 void mouseClicked(){
     switch (state.state){
         case BEGIN:
-        case ASSIGN1:
-        case ASSIGN2:
         case SORT2:
         case CONVEX2:
         case CCHAIN:
@@ -361,23 +383,33 @@ void mouseClicked(){
             }
             break;
 
+        case ASSIGN1:
+        case ASSIGN2:
+            if (mouseY > width){
+                state.next();
+            }else {
+                newPoint();
+            }
+            break;
+
         case ASSIGN3:
             if (mouseY > width){
                 if (points.size() > 2){
                     state.next();
                 }
-            }else if (dist(KERNELX, KERNELY, mouseX, mouseY) < RINGRADIUS-3){
-                points.add(new Point(mouseX, mouseY,idcounter, PT_ASSIGN));
-                idcounter++;
+            }else {
+                newPoint();
             }
             break;
+
         case PAUSE:
-            if (button.pressed()){
+            if (mouseY > width){
                 state.next();
             }
             break;
+
         case FINAL:
-            if (button.pressed()){
+            if (mouseY > width){
                 kernel.setAsKernel();
                 for (Point p : points){
                     p.reset();

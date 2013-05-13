@@ -24,12 +24,15 @@ class Ring {
             strokeWeight(2);
             ellipse(x, y, r, r);
             noStroke();
+            fill(CONVEXFILL);
             for (Point p : convexPoints){
-                fill(CONVEXFILL);
-                ellipse(p.rx, p.ry, p.r, p.r);
                 if (p.containsKernel){
-                    fill(KERNELFILL);
-                    ellipse(p.rx,p.ry, 2, 2);
+                    strokeWeight(1);
+                    stroke(KERNELFILL);
+                    ellipse(p.rx, p.ry, p.r+1, p.r+1);
+                }else{
+                    noStroke();
+                    ellipse(p.rx, p.ry, p.r, p.r);
                 }
             }
         }
