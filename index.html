@@ -1,0 +1,56 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+
+        <title>Triangulating a Star-Shaped Polygon with known Heral</title>
+        <style>
+            body {
+                margin:0;top:0;right:0;bottom:0;left:0;
+                background-color: #eee;
+            }
+            canvas {
+                float: left;
+                width: 40%;
+            }
+            #description {
+                float: left;
+                width: 56%;
+
+                background-color: #dedede;
+                font-family: avenir;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            #description p {
+                font-family: helvetica, sans-serif;
+            }
+        </style>
+    </head>
+
+    <body>
+        <script src="https://cdn.rawgit.com/processing-js/processing-js/v1.4.8/processing.js"></script>
+        <div>
+            <canvas data-processing-sources="Coin.pde Link.pde Point.pde Ring.pde State.pde project.pde"></canvas>
+            <div id="description">
+
+                <h1 id="triangulating-a-star-shaped-polygon-with-known-kernel">Triangulating A Star-Shaped Polygon with Known Kernel</h1>
+                <p>Max Goldstein, May 2013</p>
+                <h2 id="traingulatize-a-what-with-a-what">Traingulatize a what with a what?</h2>
+                <p>A polygon is <strong>star-shaped</strong> if one point inside the polygon can see every other point on the polygon. The region containing those points is called the <strong>kernel</strong>. A <strong>traingulation</strong> of a polygon divides the interior space into triangles. Every polygon admits a triangulation but finding it on a general polygon in linear time is extremely complicated. But if you know the polygon is star-shaped and you have a point on the kernel, it's much easier.</p>
+                <h2 id="and-that-algorithm-is">And that algorithm is?</h2>
+                <p>Start by drawing lines from the kernel to every vertex to create triangles inside the polygon. Because <em>the kernel isn't in the final triangulation</em>, we have to eliminate these lines. We do this by &quot;flipping&quot; to the other diagonal of the quadrilateral.</p>
+                <p>We walk the boundary of the untriangulated polygon and work inward. When we encounter a convex vertex, we know it forms a convex quadrilateral and can &quot;flip&quot; to the other diagonal, which <em>is</em> in the triangulation. Those one other proviso is that the triangle of this vertex and its neighbors must not contain the kernel. If it's okay to flip, we're now done with the vertex and can shrink the chain.</p>
+                <p>Eventually we wind up with a triangle containing the kernel, so then we just get rid of those last three temporary lines and we're done.</p>
+                <h2 id="so-this-repo-is...">So this repo is...?</h2>
+                <p>A demonstration of the algorithm. Start by clicking to add points of the polygon. When you're done, they're sorted in radial order as seen by the kernel to create a star-shaped polygon. Then watch the alogrithm unfold.</p>
+                <p>For best results, avoid placing points in too close an arc from the central kernel, and putting three points on a line.</p>
+                <p>The code is written in Processing, a graphics wrapper around Java. Thanks to processing.js, you can see a <a href="http://www.eecs.tufts.edu/~mgolds07/triangulate/">demonstration</a> run in your webbrowser.</p>
+                <h2 id="and-you-did-this-why">And you did this why?</h2>
+                <p>As a project for my class in Computational Geometry at Tufts University, in spring 2013.</p>
+            </div>
+        </div>
+    </body>
+</html>
