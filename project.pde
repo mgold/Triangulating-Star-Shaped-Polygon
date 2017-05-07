@@ -66,8 +66,11 @@ void setup(){
     marker = null;
     offset = 0;
 
-    //Comment out on processing.js
-    frame.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
+    try {
+        surface.setTitle("Triangulating a Star-Shaped Polygon with Known Kernel");
+    } catch (exception) {
+        // do nothing - this line fails in processing.js
+    }
 
     legend = new Point [4];
     legend [0] = new Point(LEGENDSPACING, width+  LEGENDSPACING, -1, PT_CONVEX);
