@@ -10,7 +10,7 @@ triangles. Every polygon admits a triangulation but finding it on a general
 polygon in linear time is extremely complicated. But if you know the polygon is
 star-shaped and you have a point on the kernel, it's much easier.
 
-##A nd that algorithm is?
+## And that algorithm is?
 
 Start by drawing lines from the kernel to every vertex to create triangles
 inside the polygon. Because *the kernel isn't in the final triangulation*, we
