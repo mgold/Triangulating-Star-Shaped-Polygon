@@ -1,5 +1,5 @@
 # Triangulating A Star-Shaped Polygon with Known Kernel
-Max Goldstein
+Max Goldstein, May 2013
 
 ## Traingulatize a what with a what?
 
