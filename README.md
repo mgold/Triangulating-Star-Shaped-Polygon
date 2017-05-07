@@ -38,7 +38,7 @@ kernel, and putting three points on a line.
 
 The code is written in Processing, a graphics wrapper around Java. Thanks to
 processing.js, you can see a
-[demonstration](http://www.eecs.tufts.edu/~mgolds07/triangulate/) run in your
+[demonstration](https://mgold.github.io/Triangulating-Star-Shaped-Polygon/) run in your
 webbrowser.
 
 ## And you did this why?
